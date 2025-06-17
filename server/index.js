@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const pool = require('./db.js');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 3000;
 
@@ -10,8 +11,10 @@ const aboutRoutes = require('./routes/aboutRoutes.js');
 const faqRoutes = require('./routes/faqRoutes.js');
 const authRoutes = require('./routes/authRoutes.js');
 const contactsRoutes = require('./routes/contactsRoutes.js');
+const superadminRoutes = require('./routes/superadminRoutes.js');
 
 app.use(express.json());
+app.use(cookieParser());
 
 // test database connection
 async function testDBConnection(){
@@ -30,10 +33,11 @@ app.get('/', (req, res) =>{
 
 // Routes
 app.use('/news', newsRoutes);
-app.use('/authentication', authRoutes);
 app.use('/about', aboutRoutes);
 app.use('/faq', faqRoutes);
 app.use('/contacts', contactsRoutes);
+app.use('/auth', authRoutes);
+app.use('/superadmin', superadminRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port: ${PORT}`);

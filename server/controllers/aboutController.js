@@ -8,7 +8,24 @@ const getAbout = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 };
+const getAboutById = async (req, res) => {
+    try{
+        const { aboutId } = req.params;
 
+        const result = await pool.query(
+            'SELECT * FROM contents.about WHERE id = $1', 
+            [aboutId]
+        );
+
+        if (result.rows.length === 0){
+            res.status(404).json({message: 'That section does not exist!'})
+        }
+
+        res.status(200).json(result.rows[0]);
+    }catch(err){
+        res.status(400).json({error: err.message});
+    }
+}
 const updateAbout = async (req, res) => {
     try{
         const { id } = req.params;
@@ -33,4 +50,5 @@ const updateAbout = async (req, res) => {
 module.exports = {
     updateAbout,
     getAbout,
+    getAboutById,
 }

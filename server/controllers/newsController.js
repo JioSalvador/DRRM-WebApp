@@ -19,7 +19,6 @@ const getNews = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
-
 const getNewsById = async (req, res) => {
     try {
         const { newsId } = req.params;
@@ -35,7 +34,6 @@ const getNewsById = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
-
 const createNews = async (req, res) => {
     const { title, content, author } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
@@ -50,7 +48,6 @@ const createNews = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
-
 const updateNewsById = async (req, res) => {
     try {
         const { newsId } = req.params;
@@ -81,8 +78,6 @@ const updateNewsById = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
-
-
 const deleteNewsById = async (req, res) => {
     try {
         const { newsId } = req.params;

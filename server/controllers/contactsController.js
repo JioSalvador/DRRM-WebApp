@@ -8,7 +8,6 @@ const getAllContacts = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 }
-
 const getContactById = async (req, res) => {
     try{
         const { contactId } = req.params
@@ -23,7 +22,6 @@ const getContactById = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 }
-
 const createContact = async (req, res) => {
     const {name, contact} = req.body;
 
@@ -38,7 +36,6 @@ const createContact = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 }
-
 const updateContactById = async (req, res) => {
     const { contactId } = req.params;
     const { name, contact } = req.body;
@@ -68,7 +65,6 @@ const updateContactById = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 }
-
 const deleteContactById = async (req, res) => {
     const { contactId } = req.params;
 

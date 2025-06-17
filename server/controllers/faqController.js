@@ -7,7 +7,6 @@ try{
 }catch(err){
     res.status(400).json({error: err.message});
 }};
-
 const createFAQ = async (req, res) => {
     try{
         const { question, content } = req.body;
@@ -22,7 +21,6 @@ const createFAQ = async (req, res) => {
         res.status(400).json({error: err.message});
     }
 }
-
 const updateFAQ = async (req, res) => {
     try {
         const { faqId } = req.params;
@@ -61,8 +59,6 @@ const updateFAQ = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 };
-
-
 const deleteFAQ = async (req, res) =>{
     try{
         const { faqId } = req.params
