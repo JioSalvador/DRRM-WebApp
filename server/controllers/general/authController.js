@@ -1,7 +1,7 @@
-const pool = require('../db');
+const pool = require('../../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const transporter = require('../utils/emailService');
+const transporter = require('../../utils/emailService');
 const crypto = require('crypto');
 
 //LOGIN, LOGOUT, AND SIGNUP
@@ -213,6 +213,15 @@ const verifyLoginOtp = async (req, res) => {
     res.status(400).json({ message: err.message });
     }
 };
+const logout = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production', // ensures HTTPS only in prod
+  });
+
+  res.status(200).json({ success: true, message: 'Logged out successfully.' });
+};
 
 //VERIFY USER SESSION
 const checkAuth = async (req, res)=>{
@@ -346,6 +355,7 @@ const deleteAccount = async (req, res) => {
 module.exports = {
     signup,
     login,
+    logout,
     checkAuth,
     changePassword,
     changeEmail,

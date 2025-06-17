@@ -1,6 +1,6 @@
 const multer = require('multer');
 //const path = require('path');
-const pool = require('../db');
+const pool = require('../../db');
 
 const storage = multer.diskStorage({
   destination: 'uploads/',

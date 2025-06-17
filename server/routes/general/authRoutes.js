@@ -1,6 +1,6 @@
 const express = require('express');
-const { login, signup, checkAuth, verifyEmail, changePassword, verifyLoginOtp, changeEmail, confirmChangeEmail } = require('../controllers/authController.js');
-const verifyToken = require('../middleware/verifyToken');
+const { login, signup, checkAuth, verifyEmail, changePassword, verifyLoginOtp, changeEmail, confirmChangeEmail, logout } = require('../../controllers/general/authController.js');
+const verifyToken = require('../../middleware/verifyToken.js');
 const router = express.Router();
 
 //router.get('', (req, res) => {});
@@ -12,5 +12,6 @@ router.post('/signup', signup);
 router.post('/change-password', verifyToken, changePassword);
 router.post('/verify-login-otp', verifyLoginOtp);
 router.post('/change-email', verifyToken, changeEmail);
+router.post('/logout', logout);
 
 module.exports = router;

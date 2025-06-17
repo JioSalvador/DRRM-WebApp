@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getNews, getNewsById, createNews, updateNewsById, deleteNewsById, upload } = require('../controllers/newsController.js');
+const { getNews, getNewsById, createNews, updateNewsById, deleteNewsById, upload } = require('../../controllers/editor/newsController');
 
 //router.get('', (req, res) => {});
 router.get('/', getNews);

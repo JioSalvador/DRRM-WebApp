@@ -1,5 +1,5 @@
 const express = require('express');
-const { banUser, deleteUser, displayLogs, updateUserRole } = require('../controllers/superadminController');
+const { banUser, deleteUser, displayLogs, updateUserRole } = require('../../controllers/superadmin/superadminController');
 const router = express.Router();
 
 //router.get('', (req, res) => {});

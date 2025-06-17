@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const {  getAllFAQ, createFAQ, updateFAQ, deleteFAQ, } = require('../controllers/faqController.js');
+const {  getAllFAQ, createFAQ, updateFAQ, deleteFAQ, } = require('../../controllers/editor/faqController.js');
 
 //router.get('', (req, res) => {});
 router.get('/', getAllFAQ);
