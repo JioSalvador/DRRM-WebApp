@@ -11,7 +11,7 @@ const aboutRoutes = require('./routes/editor/aboutRoutes.js');
 const faqRoutes = require('./routes/editor/faqRoutes.js');
 const authRoutes = require('./routes/general/authRoutes.js');
 const contactsRoutes = require('./routes/editor/contactsRoutes.js');
-const superadminRoutes = require('./routes/superadmin/superadminRoutes.js');
+const userRoutes = require('./routes/superadmin/userRoutes.js');
 const clientRoutes = require('./routes/client/clientRequestRoutes.js');
 const adminRoutes = require('./routes/admin/adminRoutes.js');
 
@@ -40,12 +40,15 @@ app.use('/faq', faqRoutes);
 app.use('/contacts', contactsRoutes);
 app.use('/auth', authRoutes);
 
-// User
+// admin
 app.use('/admin', adminRoutes);
+
+//client
 app.use('/client', clientRoutes);
-app.use('/superadmin', superadminRoutes);
+
+//superadmin
+app.use('/superadmin', userRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port: ${PORT}`);
 })
-
