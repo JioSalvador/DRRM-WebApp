@@ -13,6 +13,7 @@ router.post('/signup', signup);
 router.post('/change-password', verifyToken, changePassword);
 router.post('/verify-login-otp', verifyLoginOtp);
 router.post('/change-email', verifyToken, changeEmail);
-router.post('/logout', logout);
+router.post('/logout', verifyToken, logout);
+
 
 module.exports = router;

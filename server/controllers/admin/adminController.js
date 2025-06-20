@@ -1,6 +1,7 @@
 const pool = require('../../db');
 const generateRequestPdf = require('../../utils/pdfGenerator');
 const path = require('path');
+const logAction = require('../../utils/logAction');
 
 const getAllRequests = async (req, res) => {
   try {
@@ -25,6 +26,7 @@ const getAllRequests = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };
+
 const terminateRequest = async (req, res) => {
   const { requestId } = req.params;
   const { reason } = req.body;
@@ -37,12 +39,20 @@ const terminateRequest = async (req, res) => {
     await pool.query(
       `UPDATE services.document_requests
        SET status = 'terminated',
-           is_terminated = TRUE,
            termination_reason = $1,
            termination_date = NOW()
        WHERE id = $2`,
       [reason, requestId]
     );
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'terminated_request',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Terminated request ${requestId} with reason: ${reason}`
+    });
 
     res.status(200).json({ success: true, message: 'Request terminated successfully.' });
   } catch (err) {
@@ -57,15 +67,50 @@ const markPaymentValidated = async (req, res) => {
   try {
     await pool.query(
       `UPDATE services.document_requests
-       SET payment_validated = TRUE,
-           payment_validated_at = CURRENT_TIMESTAMP
+       SET status = 'payment_validated'
        WHERE id = $1`,
       [requestId]
     );
+    console.log('markPaymentValidated: req.user =', req.user);
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'validated_request',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Marked request ${requestId} as payment validated.`
+    });
 
     res.status(200).json({ success: true, message: 'Payment marked as validated.' });
   } catch (err) {
     console.error('Error in markPaymentValidated:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+};
+
+const revertPaymentValidation = async (req, res) => {
+  const { requestId } = req.params;
+
+  try {
+    await pool.query(
+      `UPDATE services.document_requests
+       SET status = 'pending'
+       WHERE id = $1`,
+      [requestId]
+    );
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'reverted_payment_validation',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Reverted payment validation for request ${requestId}.`
+    });
+
+    res.status(200).json({ success: true, message: 'Payment validation reverted.' });
+  } catch (err) {
+    console.error('Error in revertPaymentValidation:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };
@@ -76,34 +121,23 @@ const markForDelivery = async (req, res) => {
   try {
     await pool.query(
       `UPDATE services.document_requests
-       SET status = 'out_for_delivery',
-           is_out_for_delivery = TRUE,
-           out_for_delivery_at = NOW()
+       SET status = 'out_for_delivery'
        WHERE id = $1`,
       [requestId]
     );
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'marked_for_delivery',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Marked request ${requestId} as out for delivery.`
+    });
 
     res.status(200).json({ success: true, message: 'Request marked as out for delivery.' });
   } catch (err) {
     console.error('Error in markForDelivery:', err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
-};
-const revertPaymentValidation = async (req, res) => {
-  const { requestId } = req.params;
-
-  try {
-    await pool.query(
-      `UPDATE services.document_requests
-       SET payment_validated = FALSE,
-           payment_validated_at = NULL
-       WHERE id = $1`,
-      [requestId]
-    );
-
-    res.status(200).json({ success: true, message: 'Payment validation reverted.' });
-  } catch (err) {
-    console.error('Error in revertPaymentValidation:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };
@@ -114,12 +148,19 @@ const revertDeliveryStatus = async (req, res) => {
   try {
     await pool.query(
       `UPDATE services.document_requests
-       SET status = 'pending',
-           is_out_for_delivery = FALSE,
-           out_for_delivery_at = NULL
+       SET status = 'pending'
        WHERE id = $1`,
       [requestId]
     );
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'reverted_delivery_status',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Reverted delivery status to pending for request ${requestId}.`
+    });
 
     res.status(200).json({ success: true, message: 'Delivery status reverted to pending.' });
   } catch (err) {
@@ -132,7 +173,6 @@ const generatePdfForRequest = async (req, res) => {
   const { requestId } = req.params;
 
   try {
-    // Fetch request info
     const { rows } = await pool.query(`
       SELECT 
         dr.id,
@@ -167,7 +207,6 @@ const generatePdfForRequest = async (req, res) => {
     const idPath = request.id_document_path;
     const proofPath = request.proof_of_payment;
 
-
     await generateRequestPdf({
       fullName: request.full_name,
       address: request.delivery_address,
@@ -180,6 +219,15 @@ const generatePdfForRequest = async (req, res) => {
       proofPath
     });
 
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'generated_request_pdf',
+      targetType: 'document_request',
+      targetId: requestId,
+      description: `Generated PDF for request ${requestId}.`
+    });
+
     res.status(200).json({ success: true, message: 'PDF generated.', path: outputPath });
 
   } catch (err) {
@@ -187,7 +235,6 @@ const generatePdfForRequest = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to generate PDF.' });
   }
 };
-
 
 module.exports = {
   terminateRequest,

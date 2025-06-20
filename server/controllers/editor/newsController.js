@@ -1,6 +1,6 @@
 const multer = require('multer');
-//const path = require('path');
 const pool = require('../../db');
+const logAction = require('../../utils/logAction');
 
 const storage = multer.diskStorage({
   destination: 'uploads/',
@@ -12,93 +12,130 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const getNews = async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM contents.news ORDER BY date DESC');
-        res.status(200).json(result.rows);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+  try {
+    const result = await pool.query('SELECT * FROM contents.news ORDER BY date DESC');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
+
 const getNewsById = async (req, res) => {
-    try {
-        const { newsId } = req.params;
+  try {
+    const { newsId } = req.params;
+    const newsDoc = await pool.query('SELECT * FROM contents.news WHERE id = $1', [newsId]);
 
-        const newsDoc = await pool.query('SELECT * FROM contents.news WHERE id = $1', [newsId]);
-
-        if (newsDoc.rows.length === 0) {
-            return res.status(404).json({ error: 'News article not found!' });
-        }
-
-        res.status(200).json(newsDoc.rows[0]);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+    if (newsDoc.rows.length === 0) {
+      return res.status(404).json({ error: 'News article not found!' });
     }
+
+    res.status(200).json(newsDoc.rows[0]);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
+
 const createNews = async (req, res) => {
-    const { title, content, author } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-    const date = new Date()
-    try {
-        const result = await pool.query(
-        'INSERT INTO contents.news (title, content, author, date, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [title, content, author, date, imageUrl]
-        );
-        res.status(200).json(result.rows[0]);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+  const { title, content, author } = req.body;
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+  const date = new Date();
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO contents.news (title, content, author, date, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [title, content, author, date, imageUrl]
+    );
+
+    const newNews = result.rows[0];
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'created_news',
+      targetType: 'news',
+      targetId: newNews.id,
+      description: `Created news titled "${newNews.title}"`
+    });
+
+    res.status(200).json(newNews);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
+
 const updateNewsById = async (req, res) => {
-    try {
-        const { newsId } = req.params;
-        const { title, content, author } = req.body;
-        const imageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+  try {
+    const { newsId } = req.params;
+    const { title, content, author } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
 
-        const existing = await pool.query('SELECT * FROM contents.news WHERE id = $1', [newsId]);
-        if (existing.rows.length === 0) {
-            return res.status(404).json({ error: 'News article not found!' });
-        }
-
-        const current = existing.rows[0];
-
-        const updatedTitle = title ?? current.title;
-        const updatedContent = content ?? current.content;
-        const updatedAuthor = author ?? current.author;
-        const updatedImageUrl = imageUrl ?? current.image_url;
-
-        const result = await pool.query(
-            `UPDATE contents.news 
-             SET title = $1, content = $2, author = $3, image_url = $4 
-             WHERE id = $5 RETURNING *`,
-            [updatedTitle, updatedContent, updatedAuthor, updatedImageUrl, newsId]
-        );
-
-        res.status(200).json(result.rows[0]);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+    const existing = await pool.query('SELECT * FROM contents.news WHERE id = $1', [newsId]);
+    if (existing.rows.length === 0) {
+      return res.status(404).json({ error: 'News article not found!' });
     }
+
+    const current = existing.rows[0];
+
+    const updatedTitle = title ?? current.title;
+    const updatedContent = content ?? current.content;
+    const updatedAuthor = author ?? current.author;
+    const updatedImageUrl = imageUrl ?? current.image_url;
+
+    const result = await pool.query(
+      `UPDATE contents.news 
+       SET title = $1, content = $2, author = $3, image_url = $4 
+       WHERE id = $5 RETURNING *`,
+      [updatedTitle, updatedContent, updatedAuthor, updatedImageUrl, newsId]
+    );
+
+    const updated = result.rows[0];
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'updated_news',
+      targetType: 'news',
+      targetId: newsId,
+      description: `Updated news ID ${newsId} to title "${updated.title}"`
+    });
+
+    res.status(200).json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
+
 const deleteNewsById = async (req, res) => {
-    try {
-        const { newsId } = req.params;
+  try {
+    const { newsId } = req.params;
+    const result = await pool.query('DELETE FROM contents.news WHERE id = $1 RETURNING *', [newsId]);
 
-        const result = await pool.query('DELETE FROM contents.news WHERE id = $1 RETURNING *', [newsId]);
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'News article not found!' });
-        }
-
-        res.status(200).json({ message: 'News article deleted successfully!' });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'News article not found!' });
     }
+
+    const deleted = result.rows[0];
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'deleted_news',
+      targetType: 'news',
+      targetId: newsId,
+      description: `Deleted news titled "${deleted.title}"`
+    });
+
+    res.status(200).json({ message: 'News article deleted successfully!' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
 
 module.exports = {
-    getNews,
-    getNewsById,
-    createNews,
-    updateNewsById,
-    deleteNewsById,
-    upload,
+  getNews,
+  getNewsById,
+  createNews,
+  updateNewsById,
+  deleteNewsById,
+  upload,
 };

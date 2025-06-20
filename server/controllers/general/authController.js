@@ -3,13 +3,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const transporter = require('../../utils/emailService');
 const crypto = require('crypto');
+const logAction = require('../../utils/logAction');
 
 // SIGNUP
 const signup = async (req, res) => {
     try {
         const { email, full_name, birthdate, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const role = 'superadmin';
+        const role = 'client';
 
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userExists.rows.length > 0) {
@@ -150,6 +151,17 @@ const verifyLoginOtp = async (req, res) => {
             maxAge: 3600000,
         });
 
+        if (user.role === 'admin' || user.role === 'editor') {
+        await logAction({
+            userId: user.id,
+            role: user.role,
+            action: `${user.role}_login`,
+            targetType: 'user',
+            targetId: user.id,
+            description: `${user.full_name} logged in.`
+        });
+        }
+
         delete user.password;
 
         res.status(200).json({
@@ -167,14 +179,31 @@ const verifyLoginOtp = async (req, res) => {
 };
 
 // LOGOUT
-const logout = (req, res) => {
-    res.clearCookie('token', {
-        httpOnly: true,
-        sameSite: 'Strict',
-        secure: process.env.NODE_ENV === 'production',
-    });
+const logout = async (req, res) => {
+    const { id, role, full_name } = req.user;
 
-    res.status(200).json({ success: true, message: 'Logged out successfully.' });
+    try {
+        if (role === 'admin' || role === 'editor') {
+        await logAction({
+            userId: id,
+            role,
+            action: `${role}_logout`,
+            targetType: 'user',
+            targetId: id,
+            description: `${full_name || 'An editor'} logged out.`
+        });
+        }
+
+        res.clearCookie('token', {
+            httpOnly: true,
+            sameSite: 'Strict',
+            secure: process.env.NODE_ENV === 'production',
+        });
+
+        res.status(200).json({ success: true, message: 'Logged out successfully.' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Logout failed.' });
+    }
 };
 
 // CHECK AUTH

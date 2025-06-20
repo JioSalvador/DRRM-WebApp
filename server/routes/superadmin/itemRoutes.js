@@ -1,5 +1,5 @@
 const express = require('express');
-const { addItem, getAllItems, getItemById, updateItem, deleteItem } = require('../../controllers/superadmin/userController');
+const { addItem, getAllItems, getItemById, updateItem, deleteItem } = require('../../controllers/superadmin/itemController');
 const verifyToken = require('../../middleware/verifyToken');
 const roleGuard = require('../../middleware/roleGuard');
 const router = express.Router();

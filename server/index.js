@@ -11,9 +11,12 @@ const aboutRoutes = require('./routes/editor/aboutRoutes.js');
 const faqRoutes = require('./routes/editor/faqRoutes.js');
 const authRoutes = require('./routes/general/authRoutes.js');
 const contactsRoutes = require('./routes/editor/contactsRoutes.js');
-const userRoutes = require('./routes/superadmin/userRoutes.js');
 const clientRoutes = require('./routes/client/clientRequestRoutes.js');
 const adminRoutes = require('./routes/admin/adminRoutes.js');
+const userRoutes = require('./routes/superadmin/userRoutes.js');
+const itemRoutes = require('./routes/superadmin/itemRoutes.js');
+const logsRoutes = require('./routes/superadmin/logsRoutes.js');
+const calendarRoutes = require('./routes/editor/calendarRoutes.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -39,6 +42,7 @@ app.use('/about', aboutRoutes);
 app.use('/faq', faqRoutes);
 app.use('/contacts', contactsRoutes);
 app.use('/auth', authRoutes);
+app.use('/calendar', calendarRoutes);
 
 // admin
 app.use('/admin', adminRoutes);
@@ -47,7 +51,9 @@ app.use('/admin', adminRoutes);
 app.use('/client', clientRoutes);
 
 //superadmin
-app.use('/superadmin', userRoutes);
+app.use('/userRoutes', userRoutes);
+app.use('/logsRoutes', logsRoutes);
+app.use('/itemRoutes', itemRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port: ${PORT}`);
