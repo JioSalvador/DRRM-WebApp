@@ -1,0 +1,67 @@
+body{
+    padding-top: 10px;
+    background-color: red;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-category {
+  padding: 0.5rem 2rem;
+  font-size: 1.25rem;
+  background-color: #f8f9fa; /* light gray */
+  border-top: 7px solid #948d87; /* depth on top */
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  box-shadow: inset 0 4px 0 #948d87; /* inset shadow goes upward inside */
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  cursor: pointer;
+  
+}
+
+.folder-line {
+  height: 4px;
+  background-color: #948d87; /* same color as your button top border */
+  margin: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* optional shadow for more depth */
+  /** REMOVE THESE */
+  background-image: url(../../assets/coloured-polygonal-background-design_1164-33.png);
+}
+
+.calendar-container {
+    padding-top: 20px;
+  text-align: center;
+  background-image: url(../../assets/coloured-polygonal-background-design_1164-33.png);
+}
+
+.calendar {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;           /* ✅ THIS centers the whole calendar block */
+}
+
+.calendar table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+  background-color: #726565;
+  color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.calendar td {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.calendar tr:last-child td {
+  border-bottom: none;
+}
