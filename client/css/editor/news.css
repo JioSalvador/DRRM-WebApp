@@ -1,0 +1,86 @@
+    body {
+      background-color: #f8f9fa;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .editable-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 0.5s ease-in-out;
+    }
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-dialog-centered {
+      max-width: 700px;
+    }
+    .preview-img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+    }
+    .save-btn:hover {
+      transform: scale(1.05);
+      background-color: #138f4e !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .sidebar,
+    .offcanvas-body {
+      background-color: #970c15ec;
+      padding: 1rem;
+      border-right: 1px solid #dee2e6;
+      z-index: 1040;
+      animation: slideInLeft 0.5s ease-in-out;
+    }
+    .sidebar a,
+    .offcanvas-body a {
+      display: block;
+      color: white;
+      padding: 0.5rem 0;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.3s, color 0.3s;
+    }
+    .sidebar a:hover,
+    .offcanvas-body a:hover {
+      background-color: white;
+      transform: translateX(5px);
+      color: #000000;
+      padding: 5px;
+    }
+    .sidebar h4,
+    .offcanvas-title {
+      color: white;
+      text-align: center;
+      margin-bottom: 0;
+    }
+    .sidebar .navbar-subtitle,
+    .offcanvas-body .navbar-subtitle {
+      font-size: 0.875rem;
+      color: wheat;
+      display: block;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .main-content {
+      margin-left: 270px;
+      padding: 2rem 1rem;
+    }
+    @media (max-width: 768px) {
+      .sidebar.d-md-block { display: none !important; }
+      .main-content { margin-left: 0; padding: 1rem; }
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    #zoomSlider {
+      width: 120px;
+      vertical-align: middle;
+    }

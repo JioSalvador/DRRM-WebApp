@@ -1,0 +1,175 @@
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+    }
+    .navbar-nav .nav-link {
+      color: #fff;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: #a00000;
+    }
+    .header-image {
+      height: 350px;
+      background: linear-gradient(to right, rgba(122,0,38,0.8), rgba(0,0,0,0.6)), url('../../assets/1.PNG') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-title {
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .main-heading {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      font-size: 2rem;
+      color: #7a0026;
+    }
+    .card-section {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .card-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .section-title {
+      color: #7a0026;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .content-img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .see-more-btn {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.70rem;
+      font-weight: 600;
+      color: #7a0026;
+      border: 2px solid #7a0026;
+      border-radius: 50px;
+      text-decoration: none;
+      background-color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .see-more-btn:hover {
+      background-color: #7a0026;
+      color: white;
+      box-shadow: 0 6px 18px rgba(122, 0, 38, 0.3);
+      transform: translateY(-2px);
+    }
+    .see-more-btn i {
+      transition: transform 0.3s ease;
+    }
+    .see-more-btn:hover i {
+      transform: translateY(2px);
+    }
+    .quicklinks-section {
+      position: sticky;
+      top: 100px;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .quicklinks-section h5 {
+      color: #7a0026;
+      margin-bottom: 1rem;
+    }
+    .quicklinks-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .quicklinks-section a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      margin-bottom: 0.75rem;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .quicklinks-section a i {
+      margin-right: 10px;
+      color: #7a0026;
+    }
+    .quicklinks-section a:hover {
+      background-color: #7a0026;
+      color: #fff;
+    }
+    .quicklinks-section a:hover i {
+      color: #fff;
+    }
+    .footer {
+      background-color: #7a0026;
+      color: #fff;
+      padding: 2rem 0;
+    }
+    .footer a {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .footer a:hover {
+      color: #ccc;
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 15px;
+      background-color: black;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      z-index: 1000;
+      cursor: pointer;
+
+      /* Animation initial state */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .main-heading {
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+      background: #f9f9f9;
+      padding: 2rem 1rem 1rem;
+      text-align: center;
+      font-size: 2rem;
+      color: #7a0026;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+

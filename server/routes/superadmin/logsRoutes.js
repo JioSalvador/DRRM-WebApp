@@ -4,6 +4,6 @@ const { getAllLogs } = require('../../controllers/superadmin/logsController');
 const verifyToken = require('../../middleware/verifyToken');
 const roleGuard = require('../../middleware/roleGuard');
 
-router.get('/', verifyToken, roleGuard('Superadmin'), getAllLogs);
+router.get('/', verifyToken, roleGuard('superadmin'), getAllLogs);
 
 module.exports = router;

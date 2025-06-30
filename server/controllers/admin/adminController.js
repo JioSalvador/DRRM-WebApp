@@ -5,24 +5,60 @@ const logAction = require('../../utils/logAction');
 
 const getAllRequests = async (req, res) => {
   try {
+    console.log('🧠 getAllRequests called');
+
     const { rows } = await pool.query(`
       SELECT 
         dr.id,
         dr.user_id,
         u.email,
+        u.birthdate,
+        dr.delivery_address,
         dr.full_name,
         dr.course,
         dr.last_sy_attended,
+        dr.special_request,
+        dr.proof_of_payment,
+        dr.id_document_path,
         dr.status,
         dr.total_cost,
-        dr.created_at
+        dr.created_at,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'document_type', dri.document_type,
+              'quantity', dri.quantity,
+              'price', dri.unit_price
+            )
+          ) FILTER (WHERE dri.id IS NOT NULL),
+          '[]'
+        ) AS document_items
       FROM services.document_requests dr
       JOIN public.users u ON dr.user_id = u.id
-      ORDER BY dr.created_at DESC
+      LEFT JOIN services.document_request_items dri ON dr.id = dri.request_id
+      GROUP BY dr.id, u.id
+      ORDER BY dr.created_at DESC;
     `);
-    res.status(200).json({ success: true, requests: rows });
+
+    // 🧠 Format file paths to web-usable relative URLs
+    const formatted = rows.map(r => {
+      const formatPath = (path) => {
+        if (!path) return null;
+        const parts = path.split(/uploads[\\/]/);
+        return parts[1] ? `uploads/${parts[1].replace(/\\/g, '/')}` : null;
+      };
+
+      return {
+        ...r,
+        proof_of_payment: formatPath(r.proof_of_payment),
+        id_document_path: formatPath(r.id_document_path)
+      };
+    });
+
+    res.status(200).json({ success: true, requests: formatted });
   } catch (err) {
-    console.error('Error in getAllRequests:', err);
+    console.error('🔥 Error in getAllRequests:', err.message);
+    console.error('📄 Full error stack:', err.stack);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };

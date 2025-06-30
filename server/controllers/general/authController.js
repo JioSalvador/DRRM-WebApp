@@ -125,7 +125,14 @@ const verifyLoginOtp = async (req, res) => {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
 
-        if (!user || user.otp_code !== otp) {
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        const otpMatches = user.otp_code &&
+            user.otp_code.toString().trim() === otp.toString().trim();
+
+        if (!otpMatches) {
             return res.status(400).json({ message: 'Invalid OTP' });
         }
 
@@ -133,6 +140,7 @@ const verifyLoginOtp = async (req, res) => {
             return res.status(400).json({ message: 'OTP has expired' });
         }
 
+        // Clear OTP and mark verified
         await pool.query(
             'UPDATE users SET is_verified = true, otp_code = NULL, otp_expires_at = NULL WHERE email = $1',
             [email]
@@ -141,7 +149,7 @@ const verifyLoginOtp = async (req, res) => {
         const token = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
             process.env.JWT_SECRET || 'yoursecretkey',
-            { expiresIn: '1h' }
+            { expiresIn: '8h' }
         );
 
         res.cookie('token', token, {
@@ -151,20 +159,23 @@ const verifyLoginOtp = async (req, res) => {
             maxAge: 3600000,
         });
 
+        // Log admin/editor login
         if (user.role === 'admin' || user.role === 'editor') {
-        await logAction({
-            userId: user.id,
-            role: user.role,
-            action: `${user.role}_login`,
-            targetType: 'user',
-            targetId: user.id,
-            description: `${user.full_name} logged in.`
-        });
+            await logAction({
+                userId: user.id,
+                role: user.role,
+                action: `${user.role}_login`,
+                targetType: 'user',
+                targetId: user.id,
+                description: `${user.full_name} logged in.`
+            });
         }
 
         delete user.password;
 
+        // ✅ ✅ ✅ Send token back to frontend
         res.status(200).json({
+            token,
             user: {
                 id: user.id,
                 email: user.email,
@@ -174,6 +185,7 @@ const verifyLoginOtp = async (req, res) => {
         });
 
     } catch (err) {
+        console.error('Error in verifyLoginOtp:', err.message);
         res.status(400).json({ message: err.message });
     }
 };

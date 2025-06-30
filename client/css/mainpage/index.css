@@ -1,0 +1,412 @@
+/* BACKGROUND VIDEO */
+#bg-video {
+  position: fixed; /* Keeps the video in a fixed position on the screen */
+  right: 0;
+  bottom: 0;
+  min-width: 100%; /* Ensures full width */
+  min-height: 100%; /* Ensures full height */
+  object-fit: cover; /* Scales and crops the video to cover container */
+  z-index: -2; /* Places the video behind all other content */
+}
+
+/* DARK OVERLAY BACKGROUND */
+.overlay-bg {
+  background-color: rgba(0, 0, 0, 0.846); /* Semi-transparent black */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1; /* Above video, but behind content */
+}
+
+/* NAVBAR STYLING */
+.navbar {
+  background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent black */
+  backdrop-filter: blur(10px); /* Blur background behind the navbar */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.305);
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link {
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #a00000; /* Red highlight on hover or active */
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+  padding-top: 210px;
+  padding-bottom: 40px;
+  text-align: center;
+  color: white;
+}
+
+h1.fw-bold {
+  font-size: clamp(1.75rem, 5vw, 3rem); /* Responsive font sizing */
+}
+
+h4 {
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
+}
+
+/* CUSTOM PRIMARY BUTTON */
+.btn-primary-custom {
+  background-color: #800000; /* Maroon color */
+  border-radius: 50px;
+  color: white;
+  border: none;
+}
+
+.btn-primary-custom:hover {
+  background-color: #a00000; /* Darker red on hover */
+}
+
+/* ICON BOX STYLING */
+.icon-box-custom {
+  background: #fefdfd1c; /* Slightly transparent */
+  padding: 20px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+  text-decoration: none;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.icon-box-custom:hover {
+  transform: scale(1.05);
+}
+
+.icon-red {
+  font-size: 3rem;
+  color: #b71c1c;
+  text-shadow: 0 0 1px #b71c1c;
+}
+
+/* OVERLAY FOR MODALS */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.9); /* Dark overlay */
+  position: fixed;
+  inset: 0; /* Top, right, bottom, left = 0 */
+  z-index: 1050;
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+/* LOGIN CONTAINER */
+.login-container {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 1060;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* GLASS BOX STYLE */
+.glass-box {
+  background: rgba(122, 0, 38, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 340px;
+  color: #fff;
+  position: relative;
+  animation: zoomIn 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.glass-box.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  animation: zoomIn 0.5s ease;
+}
+
+@media (max-width: 576px) {
+  .glass-box {
+    max-width: 90%;
+    padding: 20px 16px;
+  }
+}
+
+/* Fit modal perfectly in 600px without scroll */
+.wide-modal.no-scroll {
+  max-width: 700px;
+  height: 450px;
+  padding: 40px 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Reduce spacing inside modal */
+.wide-modal h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.wide-modal .form-label {
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.wide-modal .input-group {
+  margin-bottom: 8px;
+}
+
+.wide-modal .d-flex.gap-3 {
+  gap: 0.75rem;
+}
+
+.wide-modal .alert {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.wide-modal .progress {
+  height: 6px;
+  margin-bottom: 6px;
+}
+
+.wide-modal small {
+  font-size: 0.75rem;
+}
+
+/* Bottom button layout */
+.wide-modal .form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Ensure form fills height properly */
+.wide-modal form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* MODAL HEADER */
+.glass-box .modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: none; /* Remove default border */
+  padding-bottom: 0; /* Remove bottom padding */
+}
+/* CLOSE BUTTON */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 26px;
+  color: #eee;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  color: #ff6b6b;
+  transform: rotate(90deg);
+}
+
+/* INPUT GROUPS IN MODAL */
+.glass-box .input-group {
+  width: 100%;
+  background-color: rgba(244, 239, 240, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.glass-box .input-group-text {
+  background-color: transparent;
+  border: none;
+  color: #7a0026;
+  padding: 10px 14px;
+}
+
+.glass-box .form-control {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  padding: 10px 14px;
+  flex: 1;
+}
+
+.glass-box .form-control::placeholder {
+  color: #eee;
+}
+
+.glass-box .form-control:focus {
+  box-shadow: none;
+  outline: none;
+  background-color: rgba(122, 0, 38, 0.15);
+}
+
+/* LABEL AND TEXT COLORS */
+.glass-box .form-label,
+.glass-box .form-check-label {
+  color: #ddd;
+}
+
+/* CUSTOM BUTTON STYLES */
+.glass-box .btn-light {
+  background-color: #7a0026;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 30px;
+  border: none;
+}
+
+.glass-box .btn-light:hover {
+  background-color: #a00040;
+}
+
+/* TOGGLE AND ICON STYLES */
+.input-group-text i {
+  color: white !important;
+}
+
+.btn-toggle {
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ZOOM ANIMATION */
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* PASSWORD TOGGLE BUTTON */
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+/* === Original styles omitted for brevity – already included === */
+/* === ADD THIS AT THE BOTTOM FOR RESPONSIVENESS === */
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    text-align: center;
+  }
+
+  .navbar-collapse {
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .glass-box {
+    padding: 30px 20px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .icon-box-custom {
+    max-width: 100%;
+  }
+
+  .main-content h1.fw-bold {
+    font-size: 2rem;
+  }
+
+  .main-content h4 {
+    font-size: 1.2rem;
+  }
+
+  .btn-primary-custom {
+    width: 100%;
+  }
+
+  .glass-box {
+    padding: 25px 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .icon-box-custom {
+    flex-direction: column !important;
+  }
+
+  .glass-box {
+    padding: 20px 15px;
+    font-size: 0.9rem;
+  }
+
+  .close-btn {
+    font-size: 22px;
+    top: 10px;
+    right: 12px;
+  }
+
+  .main-content {
+    padding-top: 180px;
+    padding-bottom: 30px;
+  }
+}
+
+/* OTP Box Customization */
+#otpBox {
+  max-width: 340px;
+  animation: zoomIn 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+#otpBox.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+

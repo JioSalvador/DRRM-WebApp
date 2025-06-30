@@ -4,7 +4,7 @@ const verifyToken = require('../../middleware/verifyToken');
 const roleGuard = require('../../middleware/roleGuard');
 const router = express.Router();
 
-router.use(verifyToken, roleGuard('Superadmin'));
+router.use(verifyToken, roleGuard('superadmin'));
 
 //router.get('', (req, res) => {});
 router.get('/get-all-items', getAllItems);

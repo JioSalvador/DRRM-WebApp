@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>University of the Eas56t - Caloocan</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link href="../../css/editor/contact.css" rel="stylesheet" />
+
+  <!--Navbar icon-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+ <!-- Top Navbar for Mobile -->
+  <nav class="navbar navbar-light bg-white border-bottom d-md-none">
+    <div class="container-fluid">
+      <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+        <i class="bi bi-list"></i>
+      </button>
+      <span class="navbar-brand mx-auto">UE Admin Panel</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar for Desktop -->
+  <div class="sidebar d-none d-md-block">
+    <h4>University of the East</h4>
+    <div class="navbar-subtitle">Admin Page Editor</div>
+    <a href="../editor/about.html"><i class="bi bi-info-circle me-2"></i>About</a>
+    <a href="../editor/faqs.html"><i class="bi bi-question-circle me-2"></i>FAQs</a>
+    <a href="../editor/news.html"><i class="bi bi-newspaper me-2"></i>News</a>
+    <a href="../editor/contact.html"><i class="bi bi-people me-2"></i>Contacts</a>
+  </div>
+
+  <!-- Offcanvas for Mobile -->
+  <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasSidebar">
+    <div class="offcanvas-header bg-danger text-white">
+      <h5 class="offcanvas-title">University of the East</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+    <div class="navbar-subtitle"><h4><strong>Admin Page Editor</strong></h4></div>
+    <a href="../editor/about.html"><i class="bi bi-info-circle me-2"></i>About</a>
+    <a href="../editor/faqs.html"><i class="bi bi-question-circle me-2"></i>FAQs</a>
+    <a href="../editor/news.html"><i class="bi bi-newspaper me-2"></i>News</a>
+    <a href="../editor/contact.html"><i class="bi bi-people me-2"></i>Contacts</a>
+    </div>
+  </div>
+
+<!-- Main Content -->
+  <div class="container-fluid main-content">
+    <div class="card p-4 shadow">
+      <h3 class="mb-4">Contacts</h3>
+      <div class="mb-3 text-start">
+        <button class="btn btn-success" onclick="addContact()">+ Create Contact</button>
+      </div>
+
+      <div id="contact-list">
+        <!-- Sample Contact -->
+        <div class="row g-2 contact-item align-items-start mb-3">
+          <div class="col-md-4">
+            <input type="text" class="form-control" value="Jane Doe" readonly>
+          </div>
+          <div class="col-md-3">
+            <input type="email" class="form-control" value="jane@example.com" readonly>
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" value="09123456789" readonly>
+          </div>
+          <div class="col-md-2 d-flex flex-wrap gap-1">
+            <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
+            <button class="btn btn-sm btn-outline-success save-btn d-none">Save</button>
+            <button class="btn btn-sm btn-outline-secondary cancel-btn d-none">Cancel</button>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteContact(this)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="../../js/editor/contact.js"></script>
+</body>
+</html>
