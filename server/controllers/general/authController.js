@@ -159,6 +159,8 @@ const verifyLoginOtp = async (req, res) => {
             maxAge: 3600000,
         });
 
+        console.log('✅ Cookie sent with token');
+
         // Log admin/editor login
         if (user.role === 'admin' || user.role === 'editor') {
             await logAction({
@@ -322,6 +324,31 @@ const confirmChangeEmail = async (req, res) => {
     }
 };
 
+const getMe = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const result = await pool.query(`
+      SELECT id, full_name, email, birthdate, role, is_alumni_member
+      FROM public.users
+      WHERE id = $1
+    `, [id]);
+
+    console.log("🧪 Cookie received in /me route:", req.cookies);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    const user = result.rows[0];
+    res.status(200).json({ success: true, user });
+
+  } catch (error) {
+    console.error('Error in /auth/me:', error);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};
+
 // DELETE ACCOUNT (unimplemented)
 const deleteAccount = async (req, res) => {
     try {
@@ -342,4 +369,5 @@ module.exports = {
     verifyLoginOtp,
     verifyEmail,
     confirmChangeEmail,
+    getMe
 };

@@ -31,13 +31,15 @@ const addItem = async (req, res) => {
 };
 
 const getAllItems = async (req, res) => {
-    try{
-        const result = await pool.query('SELECT * FROM services.document_types ORDER BY name');
-        res.status(200).json(result.rows[0]);
-    }catch(err){
-        res.status(400).json({error: err.message});
-    }
-}
+  try {
+    const result = await pool.query(
+      'SELECT id, name, description, unit_price FROM services.document_types WHERE is_active = true ORDER BY name'
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 const getItemById = async (req, res) => {
     try{

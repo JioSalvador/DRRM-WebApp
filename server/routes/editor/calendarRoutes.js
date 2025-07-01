@@ -9,6 +9,9 @@ const {
   updateCalendarCell,
   getFullCalendar,
   getAllCalendarTables,
+  deleteCalendarTable,
+  deleteCalendarRow,
+  deleteCalendarColumn,
 } = require('../../controllers/editor/calendarController');
 
 router.get('/', getAllCalendarTables);
@@ -30,5 +33,10 @@ router.put('/cells/:rowId/:columnId', updateCalendarCell);
 
 // Get full table (columns, rows, cells)
 router.get('/:tableId', getFullCalendar);
+
+// calendarRoutes.js
+router.delete('/:tableId', verifyToken, roleGuard('editor'), deleteCalendarTable);
+router.delete('/rows/:rowId', verifyToken, roleGuard('editor'), deleteCalendarRow);
+router.delete('/columns/:columnId', verifyToken, roleGuard('editor'), deleteCalendarColumn);
 
 module.exports = router;

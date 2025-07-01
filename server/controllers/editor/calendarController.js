@@ -95,9 +95,19 @@ const addCalendarColumn = async (req, res) => {
   const { tableId } = req.params;
   const { name } = req.body;
   try {
+    console.log('🧪 Adding column with:', { tableId, name });
+
+    // 🧮 Get current number of columns to determine order
+    const { rows } = await pool.query(
+      'SELECT COUNT(*) FROM contents.calendar_columns WHERE table_id = $1',
+      [tableId]
+    );
+    const order = parseInt(rows[0].count, 10);
+
+    // ➕ Insert new column with calculated order
     const result = await pool.query(
-      'INSERT INTO contents.calendar_columns (table_id, column_name) VALUES ($1, $2) RETURNING *',
-      [tableId, name]
+      'INSERT INTO contents.calendar_columns (table_id, column_name, column_order) VALUES ($1, $2, $3) RETURNING *',
+      [tableId, name, order]
     );
 
     // ✅ Log column addition
@@ -112,6 +122,7 @@ const addCalendarColumn = async (req, res) => {
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    console.error('❌ Failed to add column:', err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -220,6 +231,69 @@ const getFullCalendar = async (req, res) => {
   }
 };
 
+// calendarController.js
+const deleteCalendarTable = async (req, res) => {
+  const { tableId } = req.params;
+  try {
+    await pool.query('DELETE FROM contents.calendar_tables WHERE id = $1', [tableId]);
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'delete',
+      targetType: 'calendar_table',
+      targetId: tableId,
+      description: `Deleted calendar table ${tableId}`
+    });
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('❌ Failed to delete table:', err);
+    res.status(400).json({ error: err.message });
+  }
+};
+const deleteCalendarRow = async (req, res) => {
+  const { rowId } = req.params;
+  try {
+    await pool.query('DELETE FROM contents.calendar_rows WHERE id = $1', [rowId]);
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'delete_row',
+      targetType: 'calendar_row',
+      targetId: rowId,
+      description: `Deleted row ${rowId} from calendar table`
+    });
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('❌ Failed to delete row:', err);
+    res.status(400).json({ error: err.message });
+  }
+};
+const deleteCalendarColumn = async (req, res) => {
+  const { columnId } = req.params;
+  try {
+    await pool.query('DELETE FROM contents.calendar_columns WHERE id = $1', [columnId]);
+
+    await logAction({
+      userId: req.user.id,
+      role: req.user.role,
+      action: 'delete_column',
+      targetType: 'calendar_column',
+      targetId: columnId,
+      description: `Deleted column ${columnId} from calendar table`
+    });
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('❌ Failed to delete column:', err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+
 module.exports = {
   createCalendarTable,
   addCalendarColumn,
@@ -227,4 +301,7 @@ module.exports = {
   updateCalendarCell,
   getFullCalendar,
   getAllCalendarTables,
+  deleteCalendarTable,
+  deleteCalendarRow,
+  deleteCalendarColumn
 };

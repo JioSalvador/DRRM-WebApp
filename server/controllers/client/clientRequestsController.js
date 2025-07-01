@@ -16,11 +16,12 @@ const finalizeRequestFromData = async (client, userId, {
   proofOfPaymentPath,
   delivery_address,
   full_name,
-  birthdate, // ✅ Add birthdate
+  birthdate,
   last_sy_attended,
   course,
   documentsJson,
-  special_request = null // ✅ Optional special request
+  special_request = null,
+  contact_number
 }) => {
   let documentItems = [];
 
@@ -69,11 +70,12 @@ const finalizeRequestFromData = async (client, userId, {
 
   const insertRequest = await client.query(
     `INSERT INTO services.document_requests (
-      user_id, id_document_path, proof_of_payment,
-      delivery_address, is_alumni_member, alumni_fee, total_cost,
-      full_name, birthdate, last_sy_attended, course,
-      special_request
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    user_id, id_document_path, proof_of_payment,
+    delivery_address, is_alumni_member, alumni_fee, total_cost,
+    full_name, birthdate, last_sy_attended, course,
+    special_request, contact_number
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING id`,
     [
       userId,
@@ -87,7 +89,8 @@ const finalizeRequestFromData = async (client, userId, {
       birthdate,
       last_sy_attended,
       clean(course),
-      special_request ? clean(special_request) : null
+      special_request ? clean(special_request) : null,
+      clean(contact_number) // ✅ here
     ]
   );
 
@@ -201,7 +204,8 @@ const createClientRequest = async (req, res) => {
       last_sy_attended: req.body.last_sy_attended,
       course: req.body.course,
       documentsJson: req.body.documents,
-      special_request: req.body.special_request // ✅ add this line
+      special_request: req.body.special_request,
+      contact_number: req.body.contact_number,
     });
 
     await client.query('COMMIT');
@@ -225,23 +229,40 @@ const createClientRequest = async (req, res) => {
 
 const saveDraftRequest = async (req, res) => {
   const client = await pool.connect();
+  console.log('👀 Received files:', req.files);  // Add this line
   try {
     const userId = req.user.id;
+    // 🔽 Fetch full_name from users table
+    console.log('BODY:', req.body);
+    console.log('FILES:', req.files);
+    const { rows: userRows } = await client.query(
+      'SELECT full_name FROM public.users WHERE id = $1',
+      [userId]
+    );
 
+    if (userRows.length === 0) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    const full_name = clean(userRows[0].full_name); // ✅ use this instead of req.body
+
+    // Get other fields from request body
     let {
       delivery_address,
-      full_name,
       last_sy_attended,
       course,
+      contact_number,
       documents,
       special_request
     } = req.body;
 
+    // Clean text inputs
     delivery_address = clean(delivery_address);
-    full_name = clean(full_name);
     course = clean(course);
+    contact_number = clean(contact_number);
     special_request = special_request ? clean(special_request) : null;
 
+    // Handle file uploads
     let idDocumentPath = null;
     let proofOfPaymentPath = null;
 
@@ -252,24 +273,26 @@ const saveDraftRequest = async (req, res) => {
       proofOfPaymentPath = req.files.proof_of_payment[0].path;
     }
 
-    // Validate and store JSON
+    // Handle JSON documents
     let documentsToStore = null;
     if (documents) {
       try {
         documentsToStore = typeof documents === 'string'
-          ? JSON.stringify(JSON.parse(documents)) // ensure valid JSON
+          ? JSON.stringify(JSON.parse(documents))
           : JSON.stringify(documents);
       } catch {
         return res.status(400).json({ success: false, message: 'Invalid JSON in documents field.' });
       }
     }
 
+    // ✅ Insert into document_request_drafts table
     const insertDraft = await client.query(
       `INSERT INTO services.document_request_drafts (
         user_id, delivery_address, full_name,
         last_sy_attended, course,
-        id_document_path, proof_of_payment, documents, special_request
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        id_document_path, proof_of_payment,
+        documents, special_request, contact_number
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING id`,
       [
         userId,
@@ -280,7 +303,8 @@ const saveDraftRequest = async (req, res) => {
         idDocumentPath,
         proofOfPaymentPath,
         documentsToStore,
-        special_request
+        special_request,
+        contact_number
       ]
     );
 
@@ -354,7 +378,8 @@ const submitDraftRequest = async (req, res) => {
       last_sy_attended: draft.last_sy_attended,
       course: draft.course,
       documentsJson: draft.documents,
-      special_request: draft.special_request ?? null // ✅ support optional field
+      special_request: draft.special_request ?? null,
+      contact_number: draft.contact_number // ✅ add this line
     });
 
     // Delete the draft after successful submission

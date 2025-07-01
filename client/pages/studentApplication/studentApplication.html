@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Student Records Application</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link href="../../css/studentApplication/studentApplication.css" rel="stylesheet" />
+</head>
+<body>
+
+<header class="header">
+  <h1><i class="fas fa-university"></i> Online Student Records Application</h1>
+  <p class="subtext">University of the East Caloocan Registrar</p>
+</header>
+
+<nav class="stepper">
+  <div class="step active">
+    <div class="circle"><i class="fas fa-user"></i></div>
+    <div class="label">Personal Information</div>
+  </div>
+  <div class="step">
+    <div class="circle"><i class="fas fa-truck"></i></div>
+    <div class="label">Shipping</div>
+  </div>
+  <div class="step">
+    <div class="circle"><i class="fas fa-file-alt"></i></div>
+    <div class="label">Document Request</div>
+  </div>
+  <div class="step">
+    <div class="circle"><i class="fas fa-upload"></i></div>
+    <div class="label">Uploads</div>
+  </div>
+  <div class="step">
+    <div class="circle"><i class="fas fa-check"></i></div>
+    <div class="label">Summary</div>
+  </div>
+</nav>
+
+<main class="container">
+  <form id="studentForm" enctype="multipart/form-data">
+    <!-- Step 1: Personal Information -->
+    <section class="card p-4 form-step active">
+      <h2>Personal Information</h2>
+
+      <div class="section-title"><i class="fas fa-id-card"></i> Basic Information</div>
+      <div class="grid">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" readonly class="form-control" value="Juan DelaCruz"/>
+        </div>
+        <div class="form-group">
+          <label for="birthDate">Birthdate</label>
+          <input id="birthDate" type="date" readonly class="form-control" value="2000-01-01"/>
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label class="form-check d-flex align-items-center text-muted fw-normal" style="gap: 0.5rem;">
+          <input type="checkbox" class="form-check-input mt-0" disabled checked style="accent-color: #7a0026;" />
+          <span>I am an alumnus/alumna of the University of the East Caloocan</span>
+        </label>
+      </div>
+
+      <div class="section-title"><i class="fas fa-phone"></i> Contact Information</div>
+      <p class="text-muted">Please enter current contact details for application updates.</p>
+
+      <div class="form-group">
+        <label for="mobile">Mobile No.</label>
+        <input id="mobile" type="tel" class="form-control" required placeholder="+63..." />
+      </div>
+
+      <div class="section-title"><i class="fas fa-graduation-cap"></i> College/Course History</div>
+      <div class="form-group">
+        <label for="schoolYear">Last School Year Attended</label>
+        <input type="text" id="schoolYear" class="form-control" placeholder="e.g., 2022–2023" />
+      </div>
+
+      <div class="form-group">
+        <label for="courseSelect">College/Course Attended</label>
+        <select id="courseSelect" class="form-select" onchange="toggleOtherCourse()" required>
+          <option value="">Select Course</option>
+          <optgroup label="Bachelor of Science (BS)">
+            <option value="BS in Accountancy">BS in Accountancy</option>
+            <option value="BS in Computer Science">BS in Computer Science</option>
+            <option value="BS in Information Technology">BS in Information Technology</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="other">Other (please specify)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="form-group" id="otherCourseGroup" style="display: none;">
+        <label for="otherCourseInput">Other Course</label>
+        <input type="text" id="otherCourseInput" class="form-control" placeholder="Please specify your course" />
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/'">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+          Next: Shipping <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  <!-- Step 2: Shipping -->
+    <section class="card p-4 form-step">
+    <h2 class="mb-3">Shipping Information</h2>
+    <p class="text-muted">Documents will be delivered via <strong>WWWExpress</strong>. Shipping cost: <strong>₱300</strong>.</p>
+
+    <div class="form-group">
+      <label for="deliveryMethod">Delivery Method</label>
+      <input type="text" class="form-control" id="deliveryMethod" value="WWWExpress" readonly style="background-color: #f8f9fa;" />
+    </div>
+
+    <div class="form-group">
+      <label for="shippingAddress">Complete Shipping Address <span class="text-danger">*</span></label>
+      <textarea class="form-control" id="shippingAddress" rows="3" placeholder="e.g., 123 Mabini St., Caloocan City, Metro Manila, 1400" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="specialRequest">Special Request (Optional)</label>
+      <textarea class="form-control" id="specialRequest" rows="3" placeholder="e.g., Call before delivery, deliver after 5 PM"></textarea>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+        Next: Document Request <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+    </section>
+
+    <!-- Step 3: Document Request Information -->
+    <section class="card p-4 form-step">
+      <h2 class="mb-3">Requested Documents</h2>
+      <p class="text-muted">Specify how many copies you need. Total fees will be calculated automatically.</p>
+
+      <div class="table-responsive">
+        <table class="table table-bordered document-table align-middle">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Document Name</th>
+              <th>Description</th>
+              <th>Fee (₱)</th>
+              <th>No. of Copies</th>
+            </tr>
+          </thead>
+          <tbody id="documentTableBody">
+            <tr>
+              <td>TOR</td>
+              <td>Transcript of Records</td>
+              <td>150</td>
+              <td><input type="number" class="form-control copy-input" data-fee="150" min="0" /></td>
+              <td class="row-total">₱0</td>
+            </tr>
+            <tr>
+              <td>DIP</td>
+              <td>Diploma</td>
+              <td>100</td>
+              <td><input type="number" class="form-control copy-input" data-fee="100" min="0" /></td>
+              <td class="row-total">₱0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="feeBreakdown" class="mt-3">
+          <p class="d-flex justify-content-between">
+            <strong>Alumni Fee:</strong>
+            <span>₱<span id="alumniFeeDisplay">0</span></span>
+          </p>
+          <p class="d-flex justify-content-between">
+            <strong>Shipping Fee:</strong>
+            <span>₱<span id="shippingFeeDisplay">300</span></span>
+          </p>
+          <hr />
+        </div>
+      </div>
+
+      <div class="text-end mt-3 text-danger fw-bold">
+        Total Amount to Pay: ₱<span id="totalFee">0</span>
+      </div>
+
+      <p class="note mt-2"><i class="fas fa-info-circle"></i> Price is subject to change without prior notice.</p>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep(4)">
+          Next: Uploads <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Step 4: Uploads (Valid ID and Proof of Payment) -->
+    <section class="card p-4 form-step">
+      <h2 class="mb-3">Upload Valid ID and Proof of Payment</h2>
+      <p class="text-muted">Please upload clear images or PDFs of your valid ID and proof of payment.</p>
+
+      <div class="alert alert-warning small" role="alert">
+        <strong>Disclaimer:</strong> Email <a href="mailto:finance@ue.edu.ph">finance@ue.edu.ph</a> the amount that must be paid and await their response containing the payment slip. While waiting for the payment slip, you may proceed to the next section and save the request as draft. Once the transaction has been done, you may come back through the drafts section and fill up the proof of payment then submit the application.
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="validIdUpload" class="form-label">Valid ID <span class="text-danger">*</span></label>
+        <input type="file" id="validIdUpload" name="id_document" accept="image/*,application/pdf" class="form-control" />
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="paymentProofUpload" class="form-label">Proof of Payment <span class="text-danger">*</span></label>
+        <input type="file" id="paymentProofUpload" name="proof_of_payment" accept="image/*,application/pdf" class="form-control" />
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(3)">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="btn btn-primary" onclick="validateUploadsAndNext()">
+          Next: Summary <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Step 5: Summary -->
+    <section class="card p-4 form-step">
+      <h2 class="mb-3">Application Summary</h2>
+      <p class="text-muted">Please review your information before submission.</p>
+
+      <div class="mb-4">
+        <h5><i class="fas fa-user"></i> Personal Information</h5>
+        <p><strong>Full Name:</strong> <span id="summaryFullName"></span></p>
+        <p><strong>Birthdate:</strong> <span id="summaryBirthdate"></span></p>
+        <p><strong>Address:</strong> <span id="summaryAddress"></span></p>
+        <p><strong>Mobile No.:</strong> <span id="summaryMobile"></span></p>
+        <p><strong>Last School Year Attended:</strong> <span id="summarySY"></span></p>
+        <p><strong>Course:</strong> <span id="summaryCourse"></span></p>
+      </div>
+
+      <div class="mb-4">
+        <h5><i class="fas fa-truck"></i> Shipping Info</h5>
+        <p><strong>Delivery Method:</strong> WWWExpress</p>
+        <p><strong>Shipping Address:</strong> <span id="summaryShippingAddress"></span></p>
+        <p><strong>Special Request:</strong> <span id="summarySpecialRequest"></span></p>
+        <p><strong>Shipping Fee:</strong> ₱300</p>
+      </div>
+      
+    <div class="d-flex gap-4 flex-wrap align-items-start">
+      <div>
+        <strong>Valid ID:</strong>
+        <div id="summaryValidId" class="upload-preview">No file uploaded</div>
+      </div>
+      <div>
+        <strong>Proof of Payment:</strong>
+        <div id="summaryPaymentProof" class="upload-preview">No file uploaded</div>
+      </div>
+    </div>
+
+      <div class="mb-4">
+        <h5><i class="fas fa-file-alt"></i> Document Request</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Document</th>
+                <th>Copies</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="summaryDocs"></tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="2" class="text-end">Total Amount to Pay:</th>
+                  <th id="summaryTotalFee">₱0</th>
+                </tr>
+              </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(4)">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div>
+          <button id="saveDraftBtn" type="button" class="btn btn-outline-primary me-2" onclick="saveDraft()">
+            <i class="fas fa-save"></i> Save Draft
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-paper-plane"></i> Submit Application
+          </button>
+        </div>
+      </div>
+      <div id="responseBox" class="mt-3"></div>
+    </section>
+  </form>
+</main>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="../../js/studentApplication/studentApplication.js"></script>
+
+</body>
+</html>

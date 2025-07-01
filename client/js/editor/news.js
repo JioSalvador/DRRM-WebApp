@@ -87,3 +87,26 @@
     event.preventDefault();
     alert('News Created!');
   });
+
+
+async function logout() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/client/index.html'; // fallback
+    return;
+  }
+
+  try {
+    await fetch('http://localhost:3000/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  } catch (err) {
+    console.error('Logout error:', err);
+  } finally {
+    localStorage.removeItem('token');
+    window.location.href = '/client/index.html'; // redirect to login
+  }
+}

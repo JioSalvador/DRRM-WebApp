@@ -9,11 +9,12 @@ const PORT = process.env.PORT || 3000;
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/generated-pdfs', express.static(path.join(__dirname, 'generated-pdfs')));
 
 // ✅ Enable CORS for frontend on port 5500 (e.g., Live Server)
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
-    credentials: true
+  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
+  credentials: true
 }));
 
 app.use(express.json());

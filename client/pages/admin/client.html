@@ -131,6 +131,10 @@
                     </thead>
                     <tbody id="modalDocumentsTableBody"></tbody>
                     <tfoot class="table-light">
+                      <tr id="alumniFeeRow" style="display: none;">
+                        <td colspan="2" class="text-end fw-semibold">Alumni Fee:</td>
+                        <td class="text-end text-danger" id="modalAlumniFee">₱0</td>
+                      </tr>
                       <tr>
                         <td colspan="2" class="text-end fw-semibold">Total:</td>
                         <td class="text-end fw-bold text-success" id="modalTotalAmount">₱0</td>
@@ -153,8 +157,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" onclick="window.print()">
-            <i class="bi bi-printer me-1"></i> Print
+          <button type="button" class="btn btn-outline-primary" onclick="generateAndDownloadPDF()">
+            <i class="bi bi-printer me-1"></i> Generate & Print
           </button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>

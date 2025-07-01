@@ -1,0 +1,51 @@
+body { background: #f9fafb; font-family: 'Segoe UI', sans-serif; }
+.header { padding: 2rem 1rem; text-align: center; background-color: #7a0026; color: white; }
+.stepper { display: flex; justify-content: center; margin: 2rem 0; gap: 1rem; flex-wrap: wrap; }
+.step { text-align: center; width: 150px; }
+.step .circle {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: #d3d3d3; color: #fff; line-height: 50px;
+    margin: 0 auto 0.5rem; font-size: 20px;
+}
+.step.active .circle { background-color: #7a0026; }
+.form-step { display: none; }
+.form-step.active { display: block; }
+.form-group { margin-bottom: 1rem; }
+.section-title { font-weight: bold; margin: 1.5rem 0 0.5rem; font-size: 1.2rem; color: #4b5563; }
+.buttons, .d-flex.justify-content-between { margin-top: 2rem; }
+.quicklinks-section { background-color: #f1f5f9; padding: 1rem; border-radius: 8px; }
+.quicklinks-section h5 { margin-bottom: 1rem; }
+.quicklinks-section ul { list-style: none; padding: 0; }
+.quicklinks-section li { margin-bottom: 0.5rem; }
+.quicklinks-section a { text-decoration: none; color: #1e293b; }
+.quicklinks-section a:hover { text-decoration: underline; }
+.footer { background-color: #7a0026; color: white; padding-top: 2rem; margin-top: 3rem; }
+.footer a { color: #f9fafb; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+
+main.container {
+    margin-bottom: 3rem;
+}
+#summaryValidId img, #summaryPaymentProof img {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.upload-preview {
+  max-width: 220px;
+  max-height: 300px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.upload-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.25rem;
+}

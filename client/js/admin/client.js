@@ -143,7 +143,25 @@ function openRequestModal(request) {
     tbody.appendChild(row);
   });
 
-  document.getElementById('modalTotalAmount').textContent = `₱${total.toLocaleString()}`;
+  const alumniFee = Number(request.alumni_fee || 0);
+  const totalNum = Number(total || 0);
+  const grandTotal = totalNum + alumniFee;
+
+  const alumniRow = document.getElementById('alumniFeeRow');
+  const alumniFeeDisplay = document.getElementById('modalAlumniFee');
+
+  if (alumniFee > 0) {
+    alumniFeeDisplay.textContent = `₱${alumniFee.toLocaleString()}`;
+    alumniRow.style.display = 'table-row';
+  } else {
+    alumniRow.style.display = 'none';
+  }
+
+document.getElementById('modalTotalAmount').textContent = `₱${grandTotal.toLocaleString()}`;
+
+
+document.getElementById('modalTotalAmount').textContent = `₱${grandTotal.toLocaleString()}`;
+
 
   // Dynamic payment button
   const paymentBtn = document.getElementById('togglePayment');
@@ -309,5 +327,43 @@ async function logout() {
   } finally {
     localStorage.removeItem('token');
     window.location.href = '/client/index.html'; // redirect to login
+  }
+}
+
+async function generateAndDownloadPDF() {
+  const token = localStorage.getItem('token');
+  if (!token) return alert('Session expired. Please log in again.');
+
+  const requestId = currentRequest?.id;
+  if (!requestId) return alert('Invalid request selected.');
+
+  try {
+    const res = await fetch(`http://localhost:3000/admin/${requestId}/generate-pdf`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      console.error('Failed to generate PDF:', data.message);
+      return alert('Error generating PDF.');
+    }
+
+    const filePath = data.path;
+    const fileName = filePath.split('/').pop();
+
+    // Create a temporary anchor to download the file
+    const link = document.createElement('a');
+    link.href = `http://localhost:3000/generated-pdfs/${fileName}`;
+    link.download = fileName;
+    link.target = '_blank'; // Open in new tab
+    link.click();
+
+  } catch (err) {
+    console.error("Error during PDF generation:", err);
+    alert("An error occurred while generating the PDF.");
   }
 }

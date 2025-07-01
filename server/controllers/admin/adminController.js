@@ -22,6 +22,7 @@ const getAllRequests = async (req, res) => {
         dr.id_document_path,
         dr.status,
         dr.total_cost,
+        dr.alumni_fee, -- 👈 add this line
         dr.created_at,
         COALESCE(
           json_agg(
@@ -40,7 +41,6 @@ const getAllRequests = async (req, res) => {
       ORDER BY dr.created_at DESC;
     `);
 
-    // 🧠 Format file paths to web-usable relative URLs
     const formatted = rows.map(r => {
       const formatPath = (path) => {
         if (!path) return null;
@@ -264,7 +264,9 @@ const generatePdfForRequest = async (req, res) => {
       description: `Generated PDF for request ${requestId}.`
     });
 
-    res.status(200).json({ success: true, message: 'PDF generated.', path: outputPath });
+    const publicPath = `/generated-pdfs/request-${requestId}.pdf`;
+    res.status(200).json({ success: true, message: 'PDF generated.', path: publicPath });
+
 
   } catch (err) {
     console.error('Error in generatePdfForRequest:', err);

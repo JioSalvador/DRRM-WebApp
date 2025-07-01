@@ -48,7 +48,7 @@ const generateRequestPdf = async ({
           table: {
             widths: ['*', 'auto', 'auto'],
             body: [
-              ['Document Type', 'Quantity', 'Price'],
+              ['Document Type', 'Quantity', 'Unit price'],
               ...documents.map(doc => [
                 doc.type,
                 doc.quantity,

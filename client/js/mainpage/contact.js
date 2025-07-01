@@ -20,8 +20,8 @@ async function loadRegistrarContacts() {
       card.innerHTML = `
         <div class="card p-4 h-100 shadow-sm border-0">
           <h4 class="mb-3 text-danger"><i class="bi bi-person-fill me-2"></i>${contact.name}</h4>
-          <ul class="list-unstyled mb-4">
-            <li class="mb-3">
+          <ul class="list-unstyled">
+            <li>
               <i class="bi bi-telephone-fill me-2 text-danger"></i>${contact.contact}
             </li>
           </ul>
