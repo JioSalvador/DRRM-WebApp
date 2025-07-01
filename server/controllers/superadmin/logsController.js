@@ -1,7 +1,5 @@
 const pool = require('../../db');
 
-console.log("📦 superadmin.js loaded");
-
 // GET /api/logs?role=admin&user_id=5&limit=50
 const getAllLogs = async (req, res) => {
   try {
@@ -12,7 +10,7 @@ const getAllLogs = async (req, res) => {
     let query = `
       SELECT 
         l.*, 
-        u.full_name AS name  -- ✅ Alias full_name as "name" for frontend
+        u.full_name AS name
       FROM 
         public.user_action_logs l
       LEFT JOIN 

@@ -36,17 +36,21 @@ const createContact = async (req, res) => {
 
     const newContact = result.rows[0];
 
-    await logAction({
-      userId: req.user.id,
-      role: req.user.role,
-      action: 'created_contact',
-      targetType: 'contact',
-      targetId: newContact.id,
-      description: `Created new contact: ${newContact.name} (${newContact.contact})`
-    });
+    // Optional: only log if user info exists
+    if (req.user?.id && req.user?.role) {
+      await logAction({
+        userId: req.user.id,
+        role: req.user.role,
+        action: 'created_contact',
+        targetType: 'contact',
+        targetId: newContact.id,
+        description: `Created new contact: ${newContact.name} (${newContact.contact})`
+      });
+    }
 
     res.status(200).json(newContact);
   } catch (err) {
+    console.error("🔥 createContact error:", err.message);
     res.status(400).json({ error: err.message });
   }
 };

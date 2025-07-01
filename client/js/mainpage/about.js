@@ -1,21 +1,25 @@
-  document.addEventListener('DOMContentLoaded', () => {
-    const backToTopWrapper = document.querySelector('.back-to-top-wrapper');
-    const backToTopButton = document.querySelector('.back-to-top');
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('http://localhost:3000/about');
+    const data = await res.json();
 
-    if (!backToTopWrapper || !backToTopButton) return;
+    data.forEach(section => {
+      const paragraph = document.getElementById(`about-section-${section.id}`);
+      if (paragraph) paragraph.textContent = section.content;
+    });
+  } catch (err) {
+    console.error("Failed to load about content:", err);
+  }
 
-    backToTopButton.addEventListener('click', function (e) {
-      e.preventDefault();
+  // Optional: back-to-top button behavior
+  const backToTop = document.querySelector('.back-to-top');
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('show', window.scrollY > 200);
+    });
+
+    backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    window.addEventListener('scroll', () => {
-      const atBottom = window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 10;
-
-      if (atBottom) {
-        backToTopWrapper.classList.add('show');
-      } else {
-        backToTopWrapper.classList.remove('show');
-      }
-    });
-  });
+  }
+});

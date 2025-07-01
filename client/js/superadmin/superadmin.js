@@ -138,13 +138,19 @@ function searchLogs() {
 }
 
 function logout() {
+  const token = localStorage.getItem('token'); // 👈 get it from localStorage
+
   fetch('http://localhost:3000/auth/logout', {
     method: 'POST',
-    credentials: 'include'
+    headers: {
+      'Authorization': `Bearer ${token}`, // 👈 manually add token
+      'Content-Type': 'application/json'
+    }
   })
     .then(res => {
       if (res.ok) {
-        window.location.href = '/index.html';
+        localStorage.removeItem('token'); // ✅ Clear token on frontend
+        window.location.href = '/client/index.html';
       } else {
         alert('Logout failed.');
       }
