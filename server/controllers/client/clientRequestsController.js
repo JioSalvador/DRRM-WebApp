@@ -62,18 +62,22 @@ const finalizeRequestFromData = async (client, userId, {
     totalCost += unitPrice * (doc.quantity || 1);
   }
 
+  // Fees
   let alumniFee = 0;
   if (!isAlumni) {
     alumniFee = 500;
     totalCost += alumniFee;
   }
 
+  const shippingFee = 300;
+  totalCost += shippingFee;
+
   const insertRequest = await client.query(
     `INSERT INTO services.document_requests (
-    user_id, id_document_path, proof_of_payment,
-    delivery_address, is_alumni_member, alumni_fee, total_cost,
-    full_name, birthdate, last_sy_attended, course,
-    special_request, contact_number
+      user_id, id_document_path, proof_of_payment,
+      delivery_address, is_alumni_member, alumni_fee, total_cost,
+      full_name, birthdate, last_sy_attended, course,
+      special_request, contact_number
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING id`,
@@ -90,7 +94,7 @@ const finalizeRequestFromData = async (client, userId, {
       last_sy_attended,
       clean(course),
       special_request ? clean(special_request) : null,
-      clean(contact_number) // ✅ here
+      clean(contact_number)
     ]
   );
 
@@ -486,6 +490,116 @@ const updateDraftRequest = async (req, res) => {
   }
 };
 
+const getMyRequests = async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const userId = req.user.id;
+
+    // Step 1: Fetch document requests made by the student
+    const { rows: requests } = await client.query(`
+      SELECT r.id, r.status, r.full_name, r.birthdate, r.course,
+             r.delivery_address, r.last_sy_attended, r.id_document_path,
+             r.proof_of_payment, r.special_request, r.is_alumni_member,
+             r.total_cost, r.alumni_fee
+      FROM services.document_requests r
+      WHERE r.user_id = $1
+      ORDER BY r.id DESC
+    `, [userId]);
+
+    // Step 2: Fetch all document items related to those requests
+    const requestIds = requests.map(r => r.id);
+    let itemsMap = {};
+
+    if (requestIds.length > 0) {
+      const { rows: items } = await client.query(`
+        SELECT request_id, document_type, quantity, unit_price
+        FROM services.document_request_items
+        WHERE request_id = ANY($1)
+      `, [requestIds]);
+
+      // Group items per request
+      for (const item of items) {
+        if (!itemsMap[item.request_id]) itemsMap[item.request_id] = [];
+        itemsMap[item.request_id].push({
+          name: item.document_type,
+          quantity: item.quantity,
+          amount: item.unit_price * item.quantity
+        });
+      }
+    }
+
+    // Attach items to their requests
+    const enrichedRequests = requests.map(r => ({
+      ...r,
+      document_items: itemsMap[r.id] || [],
+    }));
+
+    res.status(200).json({ success: true, requests: enrichedRequests });
+
+  } catch (err) {
+    console.error("❌ Error in getMyRequests:", err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  } finally {
+    client.release();
+  }
+};
+
+const deleteDraftRequestById = async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const userId = req.user.id;
+    const draftId = req.params.id;
+
+    // Fetch draft first to check ownership and file paths
+    const { rows } = await client.query(
+      `SELECT id_document_path, proof_of_payment
+       FROM services.document_request_drafts
+       WHERE id = $1 AND user_id = $2`,
+      [draftId, userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Draft not found or not owned by user.'
+      });
+    }
+
+    const draft = rows[0];
+
+    // Delete files if they exist
+    const deleteFileIfExists = (filePath) => {
+      if (filePath && fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => {
+          if (err) console.error(`Error deleting file ${filePath}:`, err);
+        });
+      }
+    };
+
+    deleteFileIfExists(draft.id_document_path);
+    deleteFileIfExists(draft.proof_of_payment);
+
+    // Delete draft from DB
+    await client.query(
+      `DELETE FROM services.document_request_drafts
+       WHERE id = $1 AND user_id = $2`,
+      [draftId, userId]
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Draft and associated files deleted successfully.'
+    });
+
+  } catch (err) {
+    console.error('❌ Error deleting draft:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  } finally {
+    client.release();
+  }
+};
+
+
 
 module.exports = {
   getDrafts,
@@ -493,5 +607,7 @@ module.exports = {
   saveDraftRequest,
   getDraftById,
   submitDraftRequest,
-  updateDraftRequest
+  updateDraftRequest,
+  getMyRequests,
+  deleteDraftRequestById,
 };

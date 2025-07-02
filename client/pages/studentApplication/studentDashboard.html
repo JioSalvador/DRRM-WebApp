@@ -1,15 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../css/studentApplication/studentDashboard.css" rel="stylesheet">
 </head>
 <body>
-    <a href="./studentApplication.html">
-        <button>
-            create
-        </button>
+
+<!-- Mobile Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark navbar-custom d-md-none">
+  <div class="container-fluid">
+    <span class="navbar-brand">Student Dashboard</span>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column justify-content-between" id="sidebar">
+  <div>
+    <h4>UE Caloocan Registrar</h4>
+    <div class="subtitle">Student Dashboard</div>
+
+    <a href="#" id="tabRequestsBtn" class="active" onclick="switchTab('requests')">
+      <i class="bi bi-folder2-open me-2"></i>Requests
     </a>
+    <a href="#" id="tabDraftsBtn" onclick="switchTab('drafts')">
+      <i class="bi bi-pencil-square me-2"></i>Drafts
+    </a>
+    <a href="../studentApplication/studentApplication.html">
+      <i class="bi bi-file-earmark-plus me-2"></i>Create Request
+    </a>
+  </div>
+
+  <div class="mt-auto">
+    <hr class="border-light">
+    <button class="btn btn-outline-light w-100" onclick="logoutUser()">
+      <i class="bi bi-box-arrow-right me-2"></i>Logout
+    </button>
+  </div>
+</div>
+
+<!-- Toggle Button (Mobile Only) -->
+<button class="toggle-btn d-md-none" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" aria-expanded="false">
+  <i class="bi bi-list" id="toggleIcon"></i>
+</button>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="card-section" id="requestsSection">
+    <div class="section-title"><i class="bi bi-folder2-open me-2"></i>Requests</div>
+    <div class="table-responsive">
+      <table class="table align-middle text-center">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+          <tbody id="requestsTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-section d-none" id="draftsSection">
+    <div class="section-title"><i class="bi bi-pencil-square me-2"></i>Drafts</div>
+    <div class="table-responsive">
+      <table class="table align-middle text-center">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+          <tbody id="draftsTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #970c15ec;">
+        <h5 class="modal-title" id="requestModalLabel">Request Details</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- Left Panel -->
+          <div class="col-md-5 d-flex flex-column gap-3">
+            <div class="border p-2">
+              <p class="mb-1"><strong>ID Preview</strong></p>
+              <img id="uploadedID" src="https://via.placeholder.com/300x200?text=Uploaded+ID" alt="Uploaded ID" class="img-fluid rounded border w-100">
+            </div>
+            <div class="border p-2 text-center">
+              <p class="mb-1"><strong>Proof of Payment</strong></p>
+              <img id="paymentProof" src="https://via.placeholder.com/300x200?text=Payment+Proof" alt="Payment Proof" class="img-fluid rounded border w-100">
+            </div>
+          </div>
+
+          <!-- Right Panel -->
+          <div class="col-md-7">
+            <div class="border p-3 mb-3">
+              <p><strong>Name:</strong> <span id="modalName"></span></p>
+              <p><strong>Birthday:</strong> <span id="modalBirthday"></span></p>
+              <p><strong>Address:</strong> <span id="modalAddress"></span></p>
+              <p><strong>Last SY Attended:</strong> <span id="modalSY"></span></p>
+              <p><strong>Course:</strong> <span id="modalCourse"></span></p>
+            </div>
+
+            <div class="border rounded p-4 mb-4 shadow-sm">
+              <h5 class="fw-bold mb-3"><i class="bi bi-file-earmark-text-fill me-2"></i>Documents Requested</h5>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0">
+                  <thead class="table-primary">
+                    <tr>
+                      <th>Document</th>
+                      <th class="text-center">Quantity</th>
+                      <th class="text-end">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="modalDocumentsTableBody"></tbody>
+                  <tfoot class="table-light">
+                    <tr id="alumniFeeRow" style="display: none;">
+                      <td colspan="2" class="text-end fw-semibold">Alumni Fee:</td>
+                      <td class="text-end text-danger" id="modalAlumniFee">₱0</td>
+                    </tr>
+                    <tr>
+                      <tr id="shippingFeeRow">
+                        <td colspan="2" class="text-end fw-semibold">Shipping Fee:</td>
+                        <td class="text-end text-primary" id="modalShippingFee">₱120</td>
+                      </tr>
+                      <td colspan="2" class="text-end fw-semibold">Total:</td>
+                      <td class="text-end fw-bold text-success" id="modalTotalAmount">₱0</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <div class="border p-3">
+              <p><strong>Special Requests:</strong></p>
+              <p class="bg-light p-2 rounded" id="modalSpecialRequest"></p>
+            </div>
+
+            <div id="terminationReason"></div>
+
+            <div class="mt-3">
+              <button id="togglePayment" class="btn btn-success w-100 mb-2">Mark as Paid</button>
+              <button id="toggleDelivery" class="btn btn-info w-100 mb-2">Mark for Delivery</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary">
+          <i class="bi bi-printer me-1"></i> Generate & Print
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../js/studentApplication/studentDashboard.js"></script>
 </body>
 </html>

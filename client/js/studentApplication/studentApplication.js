@@ -5,12 +5,16 @@ let isAlumni = false;
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const token = localStorage.getItem('token');
-
+    const draftId = localStorage.getItem('draftIdToLoad');
     const res = await fetch('http://localhost:3000/auth/me', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
+    if (draftId) {
+      loadDraftData(draftId);
+      localStorage.removeItem('draftIdToLoad'); // ✅ clear it after use
+    }
     if (!res.ok) throw new Error('User not authenticated');
 
     const { user } = await res.json();
@@ -36,6 +40,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('❌ Failed to fetch user data:', error);
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const draft = localStorage.getItem('draftData');
+  if (!draft) return;
+
+  const data = JSON.parse(draft);
+
+  document.getElementById('fullNameInput').value = data.full_name || '';
+  document.getElementById('birthdateInput').value = data.birthdate || '';
+  document.getElementById('contactNumberInput').value = data.contact_number || '';
+  document.getElementById('addressInput').value = data.address || '';
+  document.getElementById('lastSYInput').value = data.last_sy || '';
+  document.getElementById('courseInput').value = data.course || '';
+  document.getElementById('specialRequestInput').value = data.special_request || '';
+
+  // You can loop through the documents here to render them if needed
+});
+
 
 document.getElementById('validIdUpload')?.addEventListener('change', (e) =>
   previewFile(e.target, 'validIdUpload')
@@ -192,12 +214,13 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
   const form = document.getElementById('studentForm');
   const responseBox = document.getElementById('responseBox');
   const submitBtn = form.querySelector('button[type="submit"]');
+
   responseBox.innerHTML = `<div class="alert alert-info">Submitting request...</div>`;
   submitBtn.disabled = true;
 
-  const formData = new FormData();
+  const formData = new FormData(); // ✅ start fresh
 
-  // ✅ Append individual fields
+  // Append text fields
   formData.append('delivery_address', document.getElementById('shippingAddress').value.trim());
   formData.append('last_sy_attended', document.getElementById('schoolYear').value.trim());
   formData.append('special_request', document.getElementById('specialRequest').value.trim());
@@ -207,7 +230,7 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
   const otherCourse = document.getElementById('otherCourseInput').value.trim();
   formData.append('course', course === 'other' ? otherCourse : course);
 
-  // ✅ Append files (must match multer field names)
+  // Append required files
   const idDoc = document.getElementById('validIdUpload')?.files[0];
   const proof = document.getElementById('paymentProofUpload')?.files[0];
 
@@ -217,10 +240,10 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
     return;
   }
 
-  formData.append('id_document', idDoc);
-  formData.append('proof_of_payment', proof);
+  formData.append('id_document', idDoc);           // ✅ field name must match multer
+  formData.append('proof_of_payment', proof);      // ✅ field name must match multer
 
-  // ✅ Prepare documents array
+  // Prepare documents array
   const rows = document.querySelectorAll("#documentTableBody tr");
   const documents = [];
 
@@ -240,13 +263,18 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
 
   formData.append('documents', JSON.stringify(documents));
 
+  // 🔍 Optional: log for debugging
+  for (const [key, value] of formData.entries()) {
+    console.log('🧾 Submitting field:', key, value);
+  }
+
   try {
     const token = localStorage.getItem('token');
+
     const res = await fetch('http://localhost:3000/client/request-document', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
-        // ❌ Do NOT set Content-Type manually; let the browser handle it
       },
       body: formData
     });
@@ -274,7 +302,6 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
     submitBtn.disabled = false;
   }
 });
-
 
 async function loadDocumentTypes() {
   try {
@@ -307,34 +334,34 @@ async function loadDocumentTypes() {
 }
 
 async function saveDraft() {
-  const form = document.getElementById('studentForm');
-  const formData = new FormData(form);
   const saveBtn = document.getElementById('saveDraftBtn');
   const responseBox = document.getElementById('responseBox');
-
   responseBox.innerHTML = `<div class="alert alert-info">Saving draft...</div>`;
   saveBtn.disabled = true;
 
-  formData.append('contact_number', document.getElementById('mobile').value.trim());
-  formData.append('delivery_address', document.getElementById('shippingAddress').value.trim());
-  formData.append('last_sy_attended', document.getElementById('schoolYear').value.trim());
+  const formData = new FormData();
 
-  const course = document.getElementById('courseSelect').value;
-  const other = document.getElementById('otherCourseInput').value.trim();
-  const courseToSend = course === 'other' ? other : course;
-  formData.append('course', courseToSend);
+  const contactNumber = document.getElementById('mobile')?.value.trim();
+  const address = document.getElementById('shippingAddress')?.value.trim();
+  const schoolYear = document.getElementById('schoolYear')?.value.trim();
+  const specialRequest = document.getElementById('specialRequest')?.value.trim();
 
-  const specialRequest = document.getElementById('specialRequest').value.trim();
-  formData.append('special_request', specialRequest);
+  const course = document.getElementById('courseSelect')?.value;
+  const otherCourse = document.getElementById('otherCourseInput')?.value.trim();
+  const finalCourse = course === 'other' ? otherCourse : course;
 
-  // ✅ Only use allowed file field names declared in multer.fields(...)
-  const validIdFile = document.getElementById('validIdUpload')?.files[0];
-  const paymentProofFile = document.getElementById('paymentProofUpload')?.files[0];
+  if (contactNumber) formData.append('contact_number', contactNumber);
+  if (address) formData.append('delivery_address', address);
+  if (schoolYear) formData.append('last_sy_attended', schoolYear);
+  if (specialRequest) formData.append('special_request', specialRequest);
+  if (finalCourse) formData.append('course', finalCourse);
 
-  if (validIdFile) formData.append('id_document', validIdFile); // must match backend field
-  if (paymentProofFile) formData.append('proof_of_payment', paymentProofFile); // must match backend field
+  const idFile = document.getElementById('validIdUpload')?.files[0];
+  const paymentFile = document.getElementById('paymentProofUpload')?.files[0];
 
-  // Build documents array from table
+  if (idFile) formData.append('id_document', idFile);
+  if (paymentFile) formData.append('proof_of_payment', paymentFile);
+
   const rows = document.querySelectorAll("#documentTableBody tr");
   const documents = [];
 
@@ -348,27 +375,36 @@ async function saveDraft() {
 
   formData.append('documents', JSON.stringify(documents));
 
+  // ✅ Optional: Debug log FormData contents
+  for (const pair of formData.entries()) {
+    console.log('🧾 FormData field:', pair[0], pair[1]);
+  }
+
   try {
     const token = localStorage.getItem('token');
-
     const res = await fetch('http://localhost:3000/client/save-draft', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`
+        // ❗ Do NOT set 'Content-Type' when using FormData
       },
       body: formData
     });
 
-    const data = await res.json();
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Server error: ${res.status} - ${errorText}`);
+    }
 
-    if (res.ok) {
+    const data = await res.json();
+    if (data.success || res.ok) {
       responseBox.innerHTML = `<div class="alert alert-success">✅ Draft saved successfully!</div>`;
     } else {
       responseBox.innerHTML = `<div class="alert alert-danger">❌ ${data.message || "Failed to save draft."}</div>`;
     }
 
   } catch (err) {
-    console.error("Error saving draft:", err);
+    console.error("❌ Error saving draft:", err);
     responseBox.innerHTML = `<div class="alert alert-danger">❌ Error saving draft.</div>`;
   } finally {
     saveBtn.disabled = false;

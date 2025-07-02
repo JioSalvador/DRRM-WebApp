@@ -144,12 +144,13 @@ function openRequestModal(request) {
   });
 
   const alumniFee = Number(request.alumni_fee || 0);
+  const shippingFee = 300;
   const totalNum = Number(total || 0);
-  const grandTotal = totalNum + alumniFee;
+  const grandTotal = totalNum + alumniFee + shippingFee;
 
+  // Alumni Fee Row
   const alumniRow = document.getElementById('alumniFeeRow');
   const alumniFeeDisplay = document.getElementById('modalAlumniFee');
-
   if (alumniFee > 0) {
     alumniFeeDisplay.textContent = `₱${alumniFee.toLocaleString()}`;
     alumniRow.style.display = 'table-row';
@@ -157,11 +158,14 @@ function openRequestModal(request) {
     alumniRow.style.display = 'none';
   }
 
-document.getElementById('modalTotalAmount').textContent = `₱${grandTotal.toLocaleString()}`;
+  // Shipping Fee Row
+  const shippingRow = document.getElementById('shippingFeeRow');
+  const shippingFeeDisplay = document.getElementById('modalShippingFee');
+  shippingFeeDisplay.textContent = `₱${shippingFee.toLocaleString()}`;
+  shippingRow.style.display = 'table-row';
 
-
-document.getElementById('modalTotalAmount').textContent = `₱${grandTotal.toLocaleString()}`;
-
+  // Grand Total
+  document.getElementById('modalTotalAmount').textContent = `₱${grandTotal.toLocaleString()}`;
 
   // Dynamic payment button
   const paymentBtn = document.getElementById('togglePayment');
