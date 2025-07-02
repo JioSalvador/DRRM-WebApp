@@ -247,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadThisDraft(draft) {
-  localStorage.setItem('draftData', JSON.stringify(draft));
+  console.log("🔁 Loading draft ID into localStorage:", draft.id);
+  localStorage.setItem('draftIdToLoad', draft.id);
   window.location.href = '../studentApplication/studentApplication.html';
 }

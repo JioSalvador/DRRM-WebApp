@@ -6,24 +6,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const token = localStorage.getItem('token');
     const draftId = localStorage.getItem('draftIdToLoad');
+    console.log("📦 Found draft ID to load:", draftId);
+
     const res = await fetch('http://localhost:3000/auth/me', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    if (draftId) {
-      loadDraftData(draftId);
-      localStorage.removeItem('draftIdToLoad'); // ✅ clear it after use
-    }
     if (!res.ok) throw new Error('User not authenticated');
 
     const { user } = await res.json();
     const { full_name, birthdate, is_alumni_member } = user;
 
-    isAlumni = !!is_alumni_member;
-
+    // Populate fixed user fields
     document.getElementById('fullName').value = full_name || '';
     document.getElementById('birthDate').value = birthdate?.split('T')[0] || '';
+    isAlumni = !!is_alumni_member;
 
     const alumniCheckbox = document.querySelector('input[type="checkbox"]');
     if (alumniCheckbox) alumniCheckbox.checked = isAlumni;
@@ -35,29 +33,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         : "I am not marked as an alumnus/alumna of the University of the East Caloocan";
     }
 
+    // Load documents first
     await loadDocumentTypes();
+
+    // Then load draft if available
+    if (draftId) {
+      await loadDraftData(draftId); // ✅ Await to ensure loading finishes
+      localStorage.removeItem('draftIdToLoad');
+    }
   } catch (error) {
-    console.error('❌ Failed to fetch user data:', error);
+    console.error('❌ Failed to load initial data:', error);
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const draft = localStorage.getItem('draftData');
-  if (!draft) return;
-
-  const data = JSON.parse(draft);
-
-  document.getElementById('fullNameInput').value = data.full_name || '';
-  document.getElementById('birthdateInput').value = data.birthdate || '';
-  document.getElementById('contactNumberInput').value = data.contact_number || '';
-  document.getElementById('addressInput').value = data.address || '';
-  document.getElementById('lastSYInput').value = data.last_sy || '';
-  document.getElementById('courseInput').value = data.course || '';
-  document.getElementById('specialRequestInput').value = data.special_request || '';
-
-  // You can loop through the documents here to render them if needed
-});
-
+})
 
 document.getElementById('validIdUpload')?.addEventListener('change', (e) =>
   previewFile(e.target, 'validIdUpload')
@@ -408,5 +395,66 @@ async function saveDraft() {
     responseBox.innerHTML = `<div class="alert alert-danger">❌ Error saving draft.</div>`;
   } finally {
     saveBtn.disabled = false;
+  }
+}
+
+async function loadDraftData(draftId) {
+  const token = localStorage.getItem('token');
+  try {
+    const res = await fetch(`http://localhost:3000/client/draft/${draftId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const data = await res.json();
+    if (!data.success) throw new Error('Failed to load draft');
+
+    const draft = data.draft;
+    console.log("📥 Loaded draft data:", draft);
+
+    document.getElementById('schoolYear').value = draft.last_sy_attended || '';
+    document.getElementById('mobile').value = draft.contact_number || '';
+    document.getElementById('shippingAddress').value = draft.delivery_address || '';
+    document.getElementById('specialRequest').value = draft.special_request || '';
+
+    const courseSelect = document.getElementById('courseSelect');
+    if (draft.course && courseSelect) {
+      const option = Array.from(courseSelect.options).find(opt => opt.value === draft.course);
+      if (option) {
+        courseSelect.value = draft.course;
+      } else {
+        courseSelect.value = 'other';
+        document.getElementById('otherCourseInput').value = draft.course;
+        toggleOtherCourse();
+      }
+    }
+
+    // Set uploaded file previews (optional)
+    if (draft.id_document_path) {
+      document.getElementById('idPreview').src = '/' + draft.id_document_path;
+    }
+    if (draft.proof_of_payment) {
+      document.getElementById('paymentPreview').src = '/' + draft.proof_of_payment;
+    }
+
+    // Populate documents
+    if (draft.documents) {
+      const docs = draft.documents;
+      const tableRows = document.querySelectorAll("#documentTableBody tr");
+
+      docs.forEach(doc => {
+        for (const row of tableRows) {
+          const name = row.cells[0].innerText;
+          const input = row.querySelector("input");
+          if (name === doc.type) {
+            input.value = doc.quantity;
+            break;
+          }
+        }
+      });
+      updateSummary(); // Refresh fee calculation
+    }
+  } catch (err) {
+    console.error('❌ Error loading draft:', err);
+    alert('An error occurred while loading your draft.');
   }
 }
