@@ -500,7 +500,7 @@ const getMyRequests = async (req, res) => {
       SELECT r.id, r.status, r.full_name, r.birthdate, r.course,
              r.delivery_address, r.last_sy_attended, r.id_document_path,
              r.proof_of_payment, r.special_request, r.is_alumni_member,
-             r.total_cost, r.alumni_fee
+             r.total_cost, r.alumni_fee, termination_reason
       FROM services.document_requests r
       WHERE r.user_id = $1
       ORDER BY r.id DESC
@@ -599,7 +599,46 @@ const deleteDraftRequestById = async (req, res) => {
   }
 };
 
+const receiveRequestAndSetAlumni = async (req, res) => {
+  const userId = req.user.id;
+  const { requestId } = req.params;
 
+  try {
+    await pool.query('BEGIN');
+
+    // Mark request as received
+    const result = await pool.query(
+      `UPDATE services.document_requests
+      SET status = 'received',
+          received_at = NOW()
+      WHERE id = $1 AND user_id = $2
+      RETURNING *`,
+      [requestId, userId]
+    );
+
+    if (result.rowCount === 0) {
+      await pool.query('ROLLBACK');
+      return res.status(404).json({ success: false, message: 'Request not found or not yours' });
+    }
+
+    // Set user as alumni (only if not already)
+    await pool.query(
+      `UPDATE users
+       SET is_alumni_member = true,
+           alumni_expiration = NOW() + INTERVAL '1 year'
+       WHERE id = $1 AND is_alumni_member = false`,
+      [userId]
+    );
+
+    await pool.query('COMMIT');
+    return res.json({ success: true, message: 'Request received and alumni status updated.' });
+
+  } catch (err) {
+    console.error('❌ Error in receiveRequestAndSetAlumni:', err);
+    await pool.query('ROLLBACK');
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
 
 module.exports = {
   getDrafts,
@@ -610,4 +649,5 @@ module.exports = {
   updateDraftRequest,
   getMyRequests,
   deleteDraftRequestById,
+  receiveRequestAndSetAlumni,
 };

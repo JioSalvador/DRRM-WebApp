@@ -1,14 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registrar App - Services & Calendar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/services/onlineApplications.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Applications - UE Caloocan</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link href="../../css/services/onlineApplications.css" rel="stylesheet" />
 </head>
 <body>
-
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="../../index.html">
+        <img src="../../assets/logologo-removebg-preview.png" alt="UE Logo" height="40" class="me-2"> UE Caloocan Registrar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/faqs.html">FAQs</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/contact.html">Contact</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Services</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="../services/issuanceOfRecords.html">Issuance of Academic Records</a></li>
+              <li><a class="dropdown-item" href="../services/authenticationOfRecords.html">Authentication of Records</a></li>
+              <li><a class="dropdown-item" href="../services/studentVerifications.html">Student Verifications</a></li>
+              <li><a class="dropdown-item active" href="../services/onlineApplications.html">Online Applications</a></li>
+              <li><a class="dropdown-item" href="../services/internationalCredentialEvaluation.html">International Credential Evaluation</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">School Calendar</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item active" href="../calendar/registrationGuide.html">Registration Guide</a></li>
+              <li><a class="dropdown-item" href="../../pages/calendar/schoolCalendar.html">Academic Calendar</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="d-flex ms-3" role="search">
+          <input class="form-control form-control-sm" type="search" placeholder="Search..." aria-label="Search">
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="header-image"></div>
+  <div class="main-heading"><strong>Online Applications</strong></div>
+  <div class="container my-5">
+    <div class="row g-4">
+      <div class="col-lg-9">
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-envelope-paper"></i> How to Apply</h5>
+          <p class="bg-dark text-white p-3 rounded text-center">For online applications, email us at: <strong>drrm.cal@ue.edu.ph</strong></p>
+        </div>
+        <div class="info-card text-center" data-aos="fade-up">
+          <img src="../../assets/Red and White Minimalist Premium App Comparison Chart Table Graph.png" class="img-fluid rounded shadow-sm" alt="Online App Image">
+        </div>
+        <div class="info-card text-center" data-aos="fade-up">
+          <p>You may track your document via WWWExpress website:</p>
+          <a href="https://www.wwwexpress.com.ph/" target="_blank"><button class="btn btn-outline-dark">Track Document</button></a>
+        </div>
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-exclamation-triangle"></i> Important Reminders</h5>
+          <ul>
+            <li>Please allow <strong>2 to 3 business days</strong> for a reply to your email.</li>
+            <li>Make payments only <strong>after receiving the billing</strong> to avoid adjustments.</li>
+            <li>After receiving your tracking number:
+              <ul>
+                <li><strong>Metro Manila</strong>: 3–5 business days</li>
+                <li><strong>Outside Metro Manila</strong>: 5–10 business days</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="quicklinks-section" data-aos="fade-left">
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="https://www.wwwexpress.com.ph/track-and-trace/"><i class="bi bi-laptop"></i>Track My Request</a></li>
+            <li><a href="../mainpage/faqs.html"><i class="bi bi-question-circle"></i> Registrar FAQs</a></li>
+            <li><a href="../mainpage/contact.html"><i class="bi bi-envelope-paper"></i> Contact Registrar</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer text-white">
+    <div class="container py-4">
+      <div class="row">
+        <div class="col-md-4 mb-4 text-center">
+          <img src="../../assets/University_of_the_East_seal.png" class="footer-logo mb-2" alt="UE Seal" style="max-height: 100px;">
+          <h5>University of the East - Caloocan</h5>
+          <p>Department of Registration and Records Management</p>
+        </div>
+        <div class="col-md-4 mb-4 text-center text-md-start">
+          <h6>Contact</h6>
+          <p><i class="bi bi-envelope-fill"></i> <a href="mailto:drrm.cal@ue.edu.ph" class="text-white">drrm.cal@ue.edu.ph</a></p>
+          <p><i class="bi bi-telephone-fill"></i> 5310-4550, 5328-4572 loc 184</p>
+          <p><i class="bi bi-geo-alt-fill"></i> 105 Samson Road, Caloocan City</p>
+        </div>
+        <div class="col-md-4 text-center text-md-start">
+          <h6>About</h6>
+          <p>This page provides essential information and services from the DRRM Office. It is designed to help active, inactive students, and alumni navigate academic records application, registration & graduation processes. Here, you can find resources, contact details, and office hours to assist with your academic needs.</p>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2025 University of the East – Caloocan. All rights reserved.</div>
+    </div>
+  </footer>
+  <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&uarr;</div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+    const backToTopBtn = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      backToTopBtn.classList.toggle('show', window.scrollY > 200);
+    });
+  </script>
 </body>
 </html>

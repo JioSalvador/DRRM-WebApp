@@ -188,7 +188,7 @@ document.getElementById('otpForm').addEventListener('submit', async (e) => {
       } else if (role === 'superadmin') {
         window.location.href = '/client/pages/superadmin/superadmin.html';
       } else if (role === 'client') {
-        window.location.href = '/client/pages/studentApplication/studentApplication.html';
+        window.location.href = '/client/pages/studentApplication/studentDashboard.html';
       }
     } else {
       alert(data.message || 'OTP verification failed.');

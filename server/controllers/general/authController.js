@@ -10,7 +10,7 @@ const signup = async (req, res) => {
     try {
         const { email, full_name, birthdate, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const role = 'client';
+        const role = 'editor';
 
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userExists.rows.length > 0) {

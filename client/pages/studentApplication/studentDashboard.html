@@ -36,7 +36,7 @@
 
   <div class="mt-auto">
     <hr class="border-light">
-    <button class="btn btn-outline-light w-100" onclick="logoutUser()">
+    <button class="btn btn-outline-light w-100" onclick="logout()">
       <i class="bi bi-box-arrow-right me-2"></i>Logout
     </button>
   </div>
@@ -65,7 +65,6 @@
       </table>
     </div>
   </div>
-
   <div class="card-section d-none" id="draftsSection">
     <div class="section-title"><i class="bi bi-pencil-square me-2"></i>Drafts</div>
     <div class="table-responsive">
@@ -130,11 +129,11 @@
                       <td colspan="2" class="text-end fw-semibold">Alumni Fee:</td>
                       <td class="text-end text-danger" id="modalAlumniFee">₱0</td>
                     </tr>
+                    <tr id="shippingFeeRow">
+                      <td colspan="2" class="text-end fw-semibold">Shipping Fee:</td>
+                      <td class="text-end text-primary" id="modalShippingFee">₱120</td>
+                    </tr>
                     <tr>
-                      <tr id="shippingFeeRow">
-                        <td colspan="2" class="text-end fw-semibold">Shipping Fee:</td>
-                        <td class="text-end text-primary" id="modalShippingFee">₱120</td>
-                      </tr>
                       <td colspan="2" class="text-end fw-semibold">Total:</td>
                       <td class="text-end fw-bold text-success" id="modalTotalAmount">₱0</td>
                     </tr>
@@ -147,8 +146,11 @@
               <p><strong>Special Requests:</strong></p>
               <p class="bg-light p-2 rounded" id="modalSpecialRequest"></p>
             </div>
-
-            <div id="terminationReason"></div>
+            <!-- Termination Reason -->
+            <div id="terminationReasonGroup" class="mb-3 d-none">
+              <label for="terminationReasonField" class="form-label fw-bold text-danger">Reason for Termination</label>
+              <textarea id="terminationReasonField" class="form-control" rows="3" readonly></textarea>
+            </div>
 
             <div class="mt-3">
               <button id="togglePayment" class="btn btn-success w-100 mb-2">Mark as Paid</button>

@@ -2,6 +2,41 @@ AOS.init();
 
 let isAlumni = false;
 
+function renderFilePreview(containerId, fileInputOrUrl) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (typeof fileInputOrUrl === 'string') {
+    // from saved path
+    const fullPath = '/' + fileInputOrUrl.replace(/\\/g, '/');
+    const fileName = fullPath.split('/').pop();
+    const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileName);
+
+    if (isImage) {
+      const img = document.createElement('img');
+      img.src = fullPath;
+      img.className = 'summary-image';
+      container.appendChild(img);
+    } else {
+      container.textContent = fileName;
+    }
+
+  } else if (fileInputOrUrl instanceof File) {
+    // from new file input
+    const previewURL = URL.createObjectURL(fileInputOrUrl);
+
+    if (fileInputOrUrl.type.startsWith("image/")) {
+      const img = document.createElement("img");
+      img.src = previewURL;
+      img.className = "summary-image";
+      container.appendChild(img);
+    } else {
+      container.textContent = fileInputOrUrl.name;
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const token = localStorage.getItem('token');
@@ -428,12 +463,16 @@ async function loadDraftData(draftId) {
       }
     }
 
-    // Set uploaded file previews (optional)
     if (draft.id_document_path) {
-      document.getElementById('idPreview').src = '/' + draft.id_document_path;
+      renderFilePreview('summaryValidId', draft.id_document_path);
+      const idPreview = document.getElementById('idPreview');
+      if (idPreview) idPreview.src = '/' + draft.id_document_path.replace(/\\/g, '/');
     }
+
     if (draft.proof_of_payment) {
-      document.getElementById('paymentPreview').src = '/' + draft.proof_of_payment;
+      renderFilePreview('summaryPaymentProof', draft.proof_of_payment);
+      const paymentPreview = document.getElementById('paymentPreview');
+      if (paymentPreview) paymentPreview.src = '/' + draft.proof_of_payment.replace(/\\/g, '/');
     }
 
     // Populate documents

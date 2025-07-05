@@ -17,7 +17,7 @@
     }
     .header-image {
       height: 350px;
-      background: linear-gradient(to right, rgba(122,0,38,0.😎, rgba(0,0,0,0.6)), url('../../assets/1.PNG') center/cover no-repeat);
+      background: linear-gradient(to right, rgba(122, 0, 38, 0.8), rgba(0, 0, 0, 0.6)), url('../../assets/1.PNG') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -83,6 +83,7 @@
     }
     .quicklinks-section {
       position: sticky;
+      border-left: 3px solid #970c15;
       top: 100px;
       background: #fff;
       padding: 1.5rem;

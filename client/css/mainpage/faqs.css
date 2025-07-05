@@ -17,7 +17,7 @@
     }
     .header-image {
       height: 350px;
-      background: linear-gradient(to right, rgba(122,0,38,0.8), rgba(0,0,0,0.6)), url('../../assets/1.PNG') center/cover no-repeat;
+      background: linear-gradient(to right, rgba(122, 0, 38, 0.8), rgba(0, 0, 0, 0.6)), url('../../assets/1.PNG') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -56,8 +56,34 @@
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
+    .see-more-btn {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.70rem;
+      font-weight: 600;
+      color: #7a0026;
+      border: 2px solid #7a0026;
+      border-radius: 50px;
+      text-decoration: none;
+      background-color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .see-more-btn:hover {
+      background-color: #7a0026;
+      color: white;
+      box-shadow: 0 6px 18px rgba(122, 0, 38, 0.3);
+      transform: translateY(-2px);
+    }
+    .see-more-btn i {
+      transition: transform 0.3s ease;
+    }
+    .see-more-btn:hover i {
+      transform: translateY(2px);
+    }
     .quicklinks-section {
       position: sticky;
+      border-left: 3px solid #970c15;
       top: 100px;
       background: #fff;
       padding: 1.5rem;
@@ -122,9 +148,18 @@
       font-size: 1.5rem;
       z-index: 1000;
       cursor: pointer;
+
+      /* Animation initial state */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
     }
-    .back-to-top:hover {
-      background-color: #a00000;
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
     .main-heading {
       position: sticky;
@@ -137,9 +172,3 @@
       color: #7a0026;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    .navbar {
-      background-color: transparent;
-      backdrop-filter: none;
-      box-shadow: none;
-    }
-    

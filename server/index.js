@@ -1,3 +1,5 @@
+const cron = require('node-cron');
+const cleanupExpiredRequests = require('./utils/cleanupExpiredRequests.js'); // adjust if in subfolder
 const express = require('express');
 const app = express();
 const pool = require('./db.js');
@@ -69,6 +71,12 @@ app.use('/client', clientRoutes);
 app.use('/userRoutes', userRoutes);
 app.use('/logsRoutes', logsRoutes);
 app.use('/itemRoutes', itemRoutes);
+
+// Run cleanup every day at midnight
+cron.schedule('0 0 * * *', () => {
+  console.log('[CRON] Running daily cleanup for expired document requests...');
+  cleanupExpiredRequests();
+});
 
 // Start server
 app.listen(PORT, () => {

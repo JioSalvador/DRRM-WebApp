@@ -1,14 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registrar App - Services & Calendar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/services/studentVerifications.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Verification - UE Caloocan</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- AOS Animation CSS (optional) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../css/services/studentVerifications.css" />
 </head>
 <body>
-
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="../../index.html">
+        <img src="../../assets/logologo-removebg-preview.png" alt="UE Logo" height="40" class="me-2"> UE Caloocan Registrar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/faqs.html">FAQs</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/contact.html">Contact</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Services</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="../services/issuanceOfRecords.html">Issuance of Academic Records</a></li>
+              <li><a class="dropdown-item" href="../services/authenticationOfRecords.html">Authentication of Records</a></li>
+              <li><a class="dropdown-item active" href="../services/studentVerifications.html">Student Verifications</a></li>
+              <li><a class="dropdown-item" href="../services/onlineApplications.html">Online Applications</a></li>
+              <li><a class="dropdown-item" href="../services/internationalCredentialEvaluation.html">International Credential Evaluation</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">School Calendar</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item active" href="../calendar/registrationGuide.html">Registration Guide</a></li>
+              <li><a class="dropdown-item" href="../../pages/calendar/schoolCalendar.html">Academic Calendar</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="d-flex ms-3" role="search">
+          <input class="form-control form-control-sm" type="search" placeholder="Search..." aria-label="Search">
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="header-image"></div>
+  <div class="main-heading"><strong>Student Verifications</strong></div>
+  <div class="container my-5">
+    <div class="row g-4">
+      <div class="col-lg-9">
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-info-circle"></i> Step-by-Step Process</h5>
+          <p class="text-center">This is the step-by-step process for companies applying for student verification.</p>
+          <div class="text-center my-4">
+            <img src="../../assets/ue site student verification.png" alt="Verification Steps" class="img-fluid rounded shadow-sm w-75">
+          </div>
+        </div>
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-exclamation-circle"></i> Note</h5>
+          <p>Verifying companies that submitted their verification online may still claim the hard copy of the verification result.</p>
+        </div>
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-file-earmark-check"></i> Requirements</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Online Applications</h6>
+              <ul>
+                <li>Scanned Transcript of Records</li>
+                <li>Valid ID of Student</li>
+                <li>Student Consent (emailed by DRRM)</li>
+                <li>Company ID of Verifier</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h6>Walk-in Applications</h6>
+              <ul>
+                <li>Photocopy of Transcript of Records</li>
+                <li>Valid ID of Student</li>
+                <li>Student Consent (emailed by DRRM)</li>
+                <li>Company ID of Verifier</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="info-card" data-aos="fade-up">
+          <h5><i class="bi bi-cash-stack"></i> Fees & Payment</h5>
+          <div class="row">
+            <div class="col-md-7 mb-3">
+              <iframe 
+                src="https://drive.google.com/file/d/19IkEulOPJX2s7wq6XpH3eyy7o1UVAh3w/preview" 
+                width="100%" height="400px" style="border: none;" allow="autoplay">
+              </iframe>
+            </div>
+            <div class="col-md-5 d-flex flex-column justify-content-center text-center">
+              <h5><b>Local Fee:</b> ₱150</h5>
+              <h5><b>Fee Abroad:</b> $5</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3" data-aos="fade-left">
+        <div class="quicklinks-section">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="https://www.wwwexpress.com.ph/track-and-trace/"><i class="bi bi-laptop"></i>Track My Request</a></li>
+            <li><a href="../mainpage/faqs.html"><i class="bi bi-question-circle"></i> Registrar FAQs</a></li>
+            <li><a href="../mainpage/contact.html"><i class="bi bi-envelope-paper"></i> Contact Registrar</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer text-white">
+    <div class="container py-4">
+      <div class="row">
+        <div class="col-md-4 mb-4 text-center">
+          <img src="../../assets/University_of_the_East_seal.png" class="footer-logo mb-2" alt="UE Seal" style="max-height: 100px;">
+          <h5>University of the East - Caloocan</h5>
+          <p>Department of Registration and Records Management</p>
+        </div>
+        <div class="col-md-4 mb-4 text-center text-md-start">
+          <h6>Contact</h6>
+          <p><i class="bi bi-envelope-fill"></i> <a href="mailto:drrm.cal@ue.edu.ph" class="text-white">drrm.cal@ue.edu.ph</a></p>
+          <p><i class="bi bi-telephone-fill"></i> 5310-4550, 5328-4572 loc 184</p>
+          <p><i class="bi bi-geo-alt-fill"></i> 105 Samson Road, Caloocan City</p>
+        </div>
+        <div class="col-md-4 text-center text-md-start">
+          <h6>About</h6>
+          <p>This page provides essential information and services from the DRRM Office. It is designed to help active, inactive students, and alumni navigate academic records application, registration & graduation processes. Here, you can find resources, contact details, and office hours to assist with your academic needs.</p>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2025 University of the East – Caloocan. All rights reserved.</div>
+    </div>
+  </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
 </body>
 </html>

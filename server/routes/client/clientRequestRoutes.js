@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require('../../middleware/verifyToken');
 const upload = require('../../middleware/multerSetup');
-const { createClientRequest, saveDraftRequest, getDrafts, getDraftById, submitDraftRequest, updateDraftRequest , getMyRequests, deleteDraftRequestById} = require('../../controllers/client/clientRequestsController');
+const { createClientRequest, saveDraftRequest, getDrafts, getDraftById, submitDraftRequest, updateDraftRequest , getMyRequests, deleteDraftRequestById, receiveRequestAndSetAlumni} = require('../../controllers/client/clientRequestsController');
 
 router.get('/my-drafts', verifyToken, getDrafts);
 router.get('/draft/:id', verifyToken, getDraftById);
 router.get('/my-requests', verifyToken, getMyRequests);
 
+
+router.put('/receive/:requestId', verifyToken, receiveRequestAndSetAlumni);
 // 📝 Save a draft (ID document optional)
 router.post('/save-draft',
   verifyToken,

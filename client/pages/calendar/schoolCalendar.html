@@ -1,112 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registrar App - Services & Calendar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/calendar/schoolCalendar.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School Calendar - UE Caloocan</title>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="../../css/calendar/schoolCalendar.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="btn-container">
-    <a href="registrationGuide.html">
-      <button class="btn-category">
-        Registration Guide
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="../../index.html">
+        <img src="../../assets/logologo-removebg-preview.png" alt="UE Logo" height="40" class="me-2"> UE Caloocan Registrar
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
       </button>
-    </a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/faqs.html">FAQs</a></li>
+          <li class="nav-item"><a class="nav-link" href="../mainpage/contact.html">Contact</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Services</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="../services/issuanceOfRecords.html">Issuance of Academic Records</a></li>
+              <li><a class="dropdown-item active" href="../services/authenticationOfRecords.html">Authentication of Records</a></li>
+              <li><a class="dropdown-item" href="../services/studentVerifications.html">Student Verifications</a></li>
+              <li><a class="dropdown-item" href="../services/onlineApplications.html">Online Applications</a></li>
+              <li><a class="dropdown-item" href="../services/internationalCredentialEvaluation.html">International Credential Evaluation</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">School Calendar</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="../calendar/registrationGuide.html">Registration Guide</a></li>
+              <li><a class="dropdown-item active" href="../../pages/calendar/schoolCalendar.html">Academic Calendar</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="d-flex ms-3" role="search">
+          <input class="form-control form-control-sm" type="search" placeholder="Search..." aria-label="Search">
+        </form>
+      </div>
+    </div>
+  </nav>
 
-    <a href="registrationSchedule.html">
-      <button class="btn-category">
-        Registration Schedule
-      </button>
-    </a>
+  <!-- Header Image -->
+  <div class="header-image"></div>
 
-    <a href="schoolCalendar.html">
-      <button class="btn-category">
-        School Calendar
-      </button>
-    </a>
-  </div>
+  <!-- Page Heading -->
+  <div class="main-heading"><strong>Academic Calendar</strong></div>
 
-  <div class="folder-line"></div>
+  <!-- Main Content -->
+  <div class="container my-5">
+    <div class="row g-4">
+<!-- Left column -->
+<div class="col-lg-9">
+  <div class="accordion" id="calendarAccordion">
 
-  <div class="calendar-container">
-    <h1>
-      SUMMER 2025
-    </h1>
-    <div class="calendar">
-      <h3>
-        COLLEGE SCHOOL CALENDAR
-      </h3>
-      <table>
-        <tr>
-          <td>First Day of Summer Class</td>
-          <td>June 9, 2025 (M)</td>
-        </tr>
-        <tr>
-          <td>
-            Midterm Examinations
-          </td>
-          <td>
-            June 20, 2025 (F)
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Last Recitation Day
-          </td>
-          <td>
-            July 2, 2025 (W)
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Final Examinations
-          </td>
-          <td>
-            July 3, 2025 (Th)
-          </td>
-        </tr>
-      </table>
+    <!-- College Calendar -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingCollege">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCollege" aria-expanded="true" aria-controls="collapseCollege">
+          <strong>Academic Calendar (AY 2025–2026)</strong>
+        </button>
+      </h2>
+      <div id="collapseCollege" class="accordion-collapse collapse show" aria-labelledby="headingCollege" data-bs-parent="#calendarAccordion">
+        <div class="accordion-body">
+          <h6 class="text-primary">Summer Term</h6>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of Classes</td><td>June 9, 2025 (Mon)</td></tr>
+              <tr><td>Midterm Examinations</td><td>June 20, 2025 (Fri)</td></tr>
+              <tr><td>Last Day of Class Activities</td><td>July 2, 2025 (Wed)</td></tr>
+              <tr><td>Final Examinations</td><td>July 3, 2025 (Thu)</td></tr>
+            </tbody>
+          </table>
+          
+          <h6 class="text-success mt-4"><strong>College</strong> 1st Semester</h6>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of Classes</td><td>July 7, 2025 (Mon)</td></tr>
+              <tr><td>Preliminary Exams</td><td>Aug. 11–16 (MW/TTh/F/S)</td></tr>
+              <tr><td>Midterm Exams</td><td>Sept. 24–30 (MW/TTh/F/S)</td></tr>
+              <tr><td>Final Exams</td><td>Nov. 10–15 (MW/TTh/F/S)</td></tr>
+              <tr><td>Deadline for Grade Submission</td><td>Nov. 21, 2025 (Fri)</td></tr>
+            </tbody>
+          </table>
+
+          <h6 class="text-danger mt-4"><strong>College</strong> 2nd Semester</h6>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of Classes</td><td>Nov. 28, 2025 (Fri)</td></tr>
+              <tr><td>Preliminary Exams</td><td>Jan. 20–26, 2026 (MW/TTh/F/S)</td></tr>
+              <tr><td>Midterm Exams</td><td>Mar. 3–9, 2026 (MW/TTh/F/S)</td></tr>
+              <tr><td>Final Exams</td><td>Apr. 22–28, 2026 (MW/TTh/F/S)</td></tr>
+              <tr><td>Deadline for Grade Submission</td><td>May 6, 2026 (Wed)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-        <div class="calendar">
-      <h3>
-        COLLEGE SCHOOL CALENDAR
-      </h3>
-      <table>
-        <tr>
-          <td>First Day of Summer Class</td>
-          <td>June 9, 2025 (M)</td>
-        </tr>
-        <tr>
-          <td>
-            Midterm Examinations
-          </td>
-          <td>
-            June 20, 2025 (F)
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Last Recitation Day
-          </td>
-          <td>
-            July 2, 2025 (W)
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Final Examinations
-          </td>
-          <td>
-            July 3, 2025 (Th)
-          </td>
-        </tr>
-      </table>
+    <!-- SHS Calendar -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingSHS">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSHS" aria-expanded="false" aria-controls="collapseSHS">
+          <strong>High School (SHS) Academic Calendar</strong>
+        </button>
+      </h2>
+      <div id="collapseSHS" class="accordion-collapse collapse" aria-labelledby="headingSHS" data-bs-parent="#calendarAccordion">
+        <div class="accordion-body">
+          <h6 class="text-success">1st Semester</h6>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of Classes</td><td>July 1, 2025 (Tue)</td></tr>
+              <tr><td>1st Periodic Exam</td><td>Sept. 8–10, 2025</td></tr>
+              <tr><td>Grade Submission</td><td>Sept. 23, 2025 (Tue)</td></tr>
+              <tr><td>2nd Periodic Exam</td><td>Nov. 5–7, 2025</td></tr>
+              <tr><td>Grade Submission</td><td>Nov. 14, 2025 (Fri)</td></tr>
+            </tbody>
+          </table>
+
+          <h6 class="text-danger mt-4">2nd Semester</h6>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of Classes</td><td>Nov. 24, 2025 (Mon)</td></tr>
+              <tr><td>1st Periodic Exam</td><td>Feb. 11–13, 2026</td></tr>
+              <tr><td>Grade Submission</td><td>Feb. 27, 2026 (Fri)</td></tr>
+              <tr><td>2nd Periodic Exam</td><td>Apr. 15–17, 2026</td></tr>
+              <tr><td>Grade Submission</td><td>Apr. 24, 2026 (Fri)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- K to 10 Calendar -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingK10">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseK10" aria-expanded="false" aria-controls="collapseK10">
+          <strong>Kindergarten to Grade 10 Academic Calendar</strong>
+        </button>
+      </h2>
+      <div id="collapseK10" class="accordion-collapse collapse" aria-labelledby="headingK10" data-bs-parent="#calendarAccordion">
+        <div class="accordion-body">
+          <table class="table table-striped">
+            <tbody>
+              <tr><td>First Day of School Year</td><td>July 1, 2025 (Tue)</td></tr>
+              <tr><td>1st Quarter Exams</td><td>Sept. 8–10, 2025</td></tr>
+              <tr><td>2nd Quarter Exams</td><td>Nov. 17–19, 2025</td></tr>
+              <tr><td>Christmas Break Starts</td><td>Dec. 19, 2025 (Fri)</td></tr>
+              <tr><td>Classes Resume</td><td>Jan. 5, 2026 (Mon)</td></tr>
+              <tr><td>3rd Quarter Exams</td><td>Feb. 9–11, 2026</td></tr>
+              <tr><td>4th Quarter Exams</td><td>Apr. 15–17, 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      <!-- Right column: Quick Links -->
+      <div class="col-lg-3">
+        <div class="quicklinks-section" data-aos="fade-left">
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="https://www.wwwexpress.com.ph/track-and-trace/"><i class="bi bi-laptop"></i>Track My Request</a></li>
+            <li><a href="../../pages/studentApplication/studentApplication.html"><i class="bi bi-file-earmark-text"></i> Request Documents</a></li>
+            <li><a href="../mainpage/faqs.html"><i class="bi bi-question-circle"></i> Registrar FAQs</a></li>
+            <li><a href="../mainpage/contact.html"><i class="bi bi-envelope-paper"></i> Contact Registrar</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer class="footer text-white">
+    <div class="container py-4">
+      <div class="row">
+        <div class="col-md-4 mb-4 text-center">
+          <img src="../../assets/University_of_the_East_seal.png" class="footer-logo mb-2" alt="UE Seal" style="max-height: 100px;">
+          <h5>University of the East - Caloocan</h5>
+          <p>Department of Registration and Records Management</p>
+        </div>
+        <div class="col-md-4 mb-4 text-center text-md-start">
+          <h6>Contact</h6>
+          <p><i class="bi bi-envelope-fill"></i> <a href="mailto:drrm.cal@ue.edu.ph" class="text-white">drrm.cal@ue.edu.ph</a></p>
+          <p><i class="bi bi-telephone-fill"></i> 5310-4550, 5328-4572 loc 184</p>
+          <p><i class="bi bi-geo-alt-fill"></i> 105 Samson Road, Caloocan City</p>
+        </div>
+        <div class="col-md-4 text-center text-md-start">
+          <h6>About</h6>
+          <p>This page provides essential information and services from the DRRM Office. It is designed to help active, inactive students, and alumni navigate academic records application, registration & graduation processes. Here, you can find resources, contact details, and office hours to assist with your academic needs.</p>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2025 University of the East – Caloocan. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&uarr;</div>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // Back to top button
+    const backToTopBtn = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      backToTopBtn.classList.toggle('show', window.scrollY > 200);
+    });
+  </script>
 </body>
 </html>

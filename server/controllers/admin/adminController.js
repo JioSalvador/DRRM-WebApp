@@ -5,7 +5,7 @@ const logAction = require('../../utils/logAction');
 
 const getAllRequests = async (req, res) => {
   try {
-    console.log('🧠 getAllRequests called');
+    console.log('🧠 getAllRequests (excluding received) called');
 
     const { rows } = await pool.query(`
       SELECT 
@@ -22,7 +22,7 @@ const getAllRequests = async (req, res) => {
         dr.id_document_path,
         dr.status,
         dr.total_cost,
-        dr.alumni_fee, -- 👈 add this line
+        dr.alumni_fee,
         dr.created_at,
         COALESCE(
           json_agg(
@@ -37,6 +37,7 @@ const getAllRequests = async (req, res) => {
       FROM services.document_requests dr
       JOIN public.users u ON dr.user_id = u.id
       LEFT JOIN services.document_request_items dri ON dr.id = dri.request_id
+      WHERE dr.status != 'received'
       GROUP BY dr.id, u.id
       ORDER BY dr.created_at DESC;
     `);
@@ -58,7 +59,6 @@ const getAllRequests = async (req, res) => {
     res.status(200).json({ success: true, requests: formatted });
   } catch (err) {
     console.error('🔥 Error in getAllRequests:', err.message);
-    console.error('📄 Full error stack:', err.stack);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };
