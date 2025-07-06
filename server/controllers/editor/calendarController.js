@@ -1,7 +1,6 @@
 const pool = require('../../db');
 const logAction = require('../../utils/logAction');
 
-// GET all calendar tables with full data (columns, rows, cells)
 const getAllCalendarTables = async (req, res) => {
   try {
     const tablesResult = await pool.query(`
@@ -65,7 +64,6 @@ const getAllCalendarTables = async (req, res) => {
   }
 };
 
-// CREATE new calendar table
 const createCalendarTable = async (req, res) => {
   const { title } = req.body;
   try {
@@ -74,7 +72,6 @@ const createCalendarTable = async (req, res) => {
       [title]
     );
 
-    // ✅ Log creation
     await logAction({
       userId: req.user.id,
       role: req.user.role,
@@ -97,20 +94,17 @@ const addCalendarColumn = async (req, res) => {
   try {
     console.log('🧪 Adding column with:', { tableId, name });
 
-    // 🧮 Get current number of columns to determine order
     const { rows } = await pool.query(
       'SELECT COUNT(*) FROM contents.calendar_columns WHERE table_id = $1',
       [tableId]
     );
     const order = parseInt(rows[0].count, 10);
 
-    // ➕ Insert new column with calculated order
     const result = await pool.query(
       'INSERT INTO contents.calendar_columns (table_id, column_name, column_order) VALUES ($1, $2, $3) RETURNING *',
       [tableId, name, order]
     );
 
-    // ✅ Log column addition
     await logAction({
       userId: req.user.id,
       role: req.user.role,
@@ -122,7 +116,7 @@ const addCalendarColumn = async (req, res) => {
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('❌ Failed to add column:', err);
+    console.error('Failed to add column:', err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -137,7 +131,6 @@ const addCalendarRow = async (req, res) => {
       [tableId, label]
     );
 
-    // ✅ Log row addition
     await logAction({
       userId: req.user.id,
       role: req.user.role,
@@ -173,7 +166,6 @@ const updateCalendarCell = async (req, res) => {
         [value, rowId, columnId]
       );
 
-      // ✅ Log update
       await logAction({
         userId: req.user.id,
         role: req.user.role,
@@ -191,7 +183,6 @@ const updateCalendarCell = async (req, res) => {
         [rowId, columnId, value]
       );
 
-      // ✅ Log insert
       await logAction({
         userId: req.user.id,
         role: req.user.role,
@@ -231,7 +222,6 @@ const getFullCalendar = async (req, res) => {
   }
 };
 
-// calendarController.js
 const deleteCalendarTable = async (req, res) => {
   const { tableId } = req.params;
   try {
@@ -248,7 +238,7 @@ const deleteCalendarTable = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error('❌ Failed to delete table:', err);
+    console.error('Failed to delete table:', err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -268,7 +258,7 @@ const deleteCalendarRow = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error('❌ Failed to delete row:', err);
+    console.error('Failed to delete row:', err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -288,7 +278,7 @@ const deleteCalendarColumn = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    console.error('❌ Failed to delete column:', err);
+    console.error('Failed to delete column:', err);
     res.status(400).json({ error: err.message });
   }
 };

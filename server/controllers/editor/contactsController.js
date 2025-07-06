@@ -36,7 +36,6 @@ const createContact = async (req, res) => {
 
     const newContact = result.rows[0];
 
-    // Optional: only log if user info exists
     if (req.user?.id && req.user?.role) {
       await logAction({
         userId: req.user.id,
@@ -50,7 +49,7 @@ const createContact = async (req, res) => {
 
     res.status(200).json(newContact);
   } catch (err) {
-    console.error("🔥 createContact error:", err.message);
+    console.error("createContact error:", err.message);
     res.status(400).json({ error: err.message });
   }
 };

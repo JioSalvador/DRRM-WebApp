@@ -10,12 +10,11 @@ router.get('/my-requests', verifyToken, getMyRequests);
 
 
 router.put('/receive/:requestId', verifyToken, receiveRequestAndSetAlumni);
-// 📝 Save a draft (ID document optional)
 router.post('/save-draft',
   verifyToken,
   (req, res, next) => {
     const contentType = req.headers['content-type'] || '';
-    console.log('🧾 Incoming Content-Type:', contentType);
+    console.log('Incoming Content-Type:', contentType);
     next();
   },
   upload.fields([
@@ -36,21 +35,19 @@ router.patch(
   updateDraftRequest
 );
 
-// ✅ Submit a new document request (direct)
 router.post('/request-document',
   verifyToken,
   upload.fields([
     { name: 'id_document', maxCount: 1 },
-    { name: 'proof_of_payment', maxCount: 1 }, // <- This was missing
+    { name: 'proof_of_payment', maxCount: 1 },
   ]),
   createClientRequest
 );
 
 
-// 📤 Submit a previously saved draft
 router.post('/submit-draft/:id', verifyToken, upload.fields([
   { name: 'id_document', maxCount: 1 },
-]), submitDraftRequest); // ✅ Add this
+]), submitDraftRequest);
 
 router.delete('/draft/:id', verifyToken, deleteDraftRequestById);
 

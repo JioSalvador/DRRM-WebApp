@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
-  // 🔽 Fetch about content from backend
   try {
     const res = await fetch('http://localhost:3000/about', {
       method: 'GET',
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     data.forEach((entry, i) => {
       if (textareas[i]) {
         textareas[i].value = entry.content;
-        textareas[i].dataset.id = entry.id; // Store id for later use
+        textareas[i].dataset.id = entry.id;
       }
     });
   } catch (err) {
@@ -36,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     alert("Failed to load content. Please refresh or contact support.");
   }
 
-  // 🔼 Set up edit and save functionality
   textareas.forEach((textarea, index) => {
     const saveBtn = saveButtons[index];
 
@@ -70,10 +68,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         textarea.setAttribute('readonly', true);
         saveBtn.disabled = true;
-        console.log(`✅ Updated section ${id}:`, result);
+        console.log(`Updated section ${id}:`, result);
         alert("Section saved successfully!");
       } catch (err) {
-        console.error(`❌ Error updating section ${id}:`, err);
+        console.error(`Error updating section ${id}:`, err);
         alert("Failed to save changes.");
       }
     });
@@ -83,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 async function logout() {
   const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = '/client/index.html'; // fallback
+    window.location.href = '/client/index.html';
     return;
   }
 
@@ -98,6 +96,6 @@ async function logout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('token');
-    window.location.href = '/client/index.html'; // redirect to login
+    window.location.href = '/client/index.html';
   }
 }

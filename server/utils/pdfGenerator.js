@@ -2,7 +2,6 @@ const fs = require('fs');
 const PdfPrinter = require('pdfmake');
 const path = require('path');
 
-// Register fonts
 const fonts = {
   Roboto: {
     normal: path.join(__dirname, 'RobotoMono-Regular.ttf'),
@@ -12,12 +11,11 @@ const fonts = {
 
 const printer = new PdfPrinter(fonts);
 
-// Helper: Get base64 image with MIME type
 const getBase64Image = (filePath) => {
   const ext = path.extname(filePath).toLowerCase();
   const base64 = fs.readFileSync(filePath).toString('base64');
 
-  let mimeType = 'image/png'; // default
+  let mimeType = 'image/png';
   if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
   else if (ext === '.webp') mimeType = 'image/webp';
 

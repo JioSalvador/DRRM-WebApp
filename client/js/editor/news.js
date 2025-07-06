@@ -70,7 +70,7 @@
   zoomSlider.addEventListener('input', function () {
     if (cropper) {
       const zoomLevel = parseFloat(this.value);
-      cropper.zoomTo(zoomLevel + 1); // base zoom starts at 1
+      cropper.zoomTo(zoomLevel + 1);
     }
   });
 
@@ -92,7 +92,7 @@
 async function logout() {
   const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = '/client/index.html'; // fallback
+    window.location.href = '/client/index.html';
     return;
   }
 
@@ -107,6 +107,6 @@ async function logout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('token');
-    window.location.href = '/client/index.html'; // redirect to login
+    window.location.href = '/client/index.html';
   }
 }

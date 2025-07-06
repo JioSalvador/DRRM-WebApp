@@ -100,7 +100,7 @@ async function refreshClientTable() {
       }
     });
   } catch (err) {
-    console.error("💥 Network error while fetching requests:", err);
+    console.error("Network error while fetching requests:", err);
     alert("Server or network error.");
   }
 }
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function logout() {
   const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = '/client/index.html'; // fallback
+    window.location.href = '/client/index.html'; 
     return;
   }
 
@@ -330,7 +330,7 @@ async function logout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('token');
-    window.location.href = '/client/index.html'; // redirect to login
+    window.location.href = '/client/index.html';
   }
 }
 
@@ -363,7 +363,7 @@ async function generateAndDownloadPDF() {
     const link = document.createElement('a');
     link.href = `http://localhost:3000/generated-pdfs/${fileName}`;
     link.download = fileName;
-    link.target = '_blank'; // Open in new tab
+    link.target = '_blank';
     link.click();
 
   } catch (err) {

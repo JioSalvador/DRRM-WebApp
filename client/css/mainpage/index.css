@@ -1,29 +1,29 @@
 /* BACKGROUND VIDEO */
 #bg-video {
-  position: fixed; /* Keeps the video in a fixed position on the screen */
+  position: fixed;
   right: 0;
   bottom: 0;
-  min-width: 100%; /* Ensures full width */
-  min-height: 100%; /* Ensures full height */
-  object-fit: cover; /* Scales and crops the video to cover container */
-  z-index: -2; /* Places the video behind all other content */
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: -2;
 }
 
 /* DARK OVERLAY BACKGROUND */
 .overlay-bg {
-  background-color: rgba(0, 0, 0, 0.846); /* Semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.846);
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1; /* Above video, but behind content */
+  z-index: -1;
 }
 
 /* NAVBAR STYLING */
 .navbar {
-  background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent black */
-  backdrop-filter: blur(10px); /* Blur background behind the navbar */
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.305);
   transition: all 0.3s ease;
 }
@@ -35,7 +35,7 @@
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-  color: #a00000; /* Red highlight on hover or active */
+  color: #a00000;
 }
 
 /* MAIN CONTENT AREA */
@@ -47,7 +47,7 @@
 }
 
 h1.fw-bold {
-  font-size: clamp(1.75rem, 5vw, 3rem); /* Responsive font sizing */
+  font-size: clamp(1.75rem, 5vw, 3rem);
 }
 
 h4 {
@@ -56,19 +56,19 @@ h4 {
 
 /* CUSTOM PRIMARY BUTTON */
 .btn-primary-custom {
-  background-color: #800000; /* Maroon color */
+  background-color: #800000;
   border-radius: 50px;
   color: white;
   border: none;
 }
 
 .btn-primary-custom:hover {
-  background-color: #a00000; /* Darker red on hover */
+  background-color: #a00000;
 }
 
 /* ICON BOX STYLING */
 .icon-box-custom {
-  background: #fefdfd1c; /* Slightly transparent */
+  background: #fefdfd1c;
   padding: 20px;
   border-radius: 15px;
   width: 100%;
@@ -103,9 +103,9 @@ h4 {
 
 /* OVERLAY FOR MODALS */
 .overlay {
-  background-color: rgba(0, 0, 0, 0.9); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.9);
   position: fixed;
-  inset: 0; /* Top, right, bottom, left = 0 */
+  inset: 0;
   z-index: 1050;
   display: none;
   transition: opacity 0.3s ease;
@@ -220,8 +220,8 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: none; /* Remove default border */
-  padding-bottom: 0; /* Remove bottom padding */
+  border-bottom: none;
+  padding-bottom: 0;
 }
 /* CLOSE BUTTON */
 .close-btn {
@@ -329,8 +329,7 @@ h4 {
   display: flex;
   align-items: center;
 }
-/* === Original styles omitted for brevity – already included === */
-/* === ADD THIS AT THE BOTTOM FOR RESPONSIVENESS === */
+
 
 /* Responsive adjustments */
 @media (max-width: 991.98px) {

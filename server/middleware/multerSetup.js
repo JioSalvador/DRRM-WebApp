@@ -22,8 +22,6 @@ const storage = multer.diskStorage({
 
 // Safer file filter with logging
 const fileFilter = (req, file, cb) => {
-  console.log('🧪 Checking file:', file.originalname, '| Type:', file.mimetype);
-
   const allowedTypes = [
     'application/pdf',
     'image/jpeg',
@@ -34,7 +32,7 @@ const fileFilter = (req, file, cb) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    console.warn('❌ Rejected file:', file.originalname, '| Type:', file.mimetype);
+    console.warn('Rejected file:', file.originalname, '| Type:', file.mimetype);
     cb(new Error('Only PDF, JPG, or PNG files are allowed.'));
   }
 };

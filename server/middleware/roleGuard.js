@@ -1,5 +1,3 @@
-// middlewares/roleGuard.js
-
 const roleGuard = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {

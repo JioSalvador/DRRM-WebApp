@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const token = localStorage.getItem('token');
     const draftId = localStorage.getItem('draftIdToLoad');
-    console.log("📦 Found draft ID to load:", draftId);
+    console.log("Found draft ID to load:", draftId);
 
     const res = await fetch('http://localhost:3000/auth/me', {
       method: 'GET',
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       localStorage.removeItem('draftIdToLoad');
     }
   } catch (error) {
-    console.error('❌ Failed to load initial data:', error);
+    console.error('Failed to load initial data:', error);
   }
 })
 
@@ -216,14 +216,12 @@ function validateUploadsAndNext() {
   const validIdInput = document.getElementById('validIdUpload');
   const paymentProofInput = document.getElementById('paymentProofUpload');
 
-  // If both are empty, allow skipping (user may be saving as draft)
   const isValidIdMissing = !validIdInput.files.length;
   const isPaymentMissing = !paymentProofInput.files.length;
 
-  // Only warn if BOTH are missing AND the user is trying to submit
   if (isValidIdMissing && isPaymentMissing) {
     const confirmSkip = confirm("You haven't uploaded a Valid ID or Proof of Payment. Are you still waiting for payment confirmation and wish to continue for now?");
-    if (!confirmSkip) return; // user chose not to skip
+    if (!confirmSkip) return;
   }
 
   nextStep(5);
@@ -240,7 +238,7 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
   responseBox.innerHTML = `<div class="alert alert-info">Submitting request...</div>`;
   submitBtn.disabled = true;
 
-  const formData = new FormData(); // ✅ start fresh
+  const formData = new FormData();
 
   // Append text fields
   formData.append('delivery_address', document.getElementById('shippingAddress').value.trim());
@@ -262,8 +260,8 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
     return;
   }
 
-  formData.append('id_document', idDoc);           // ✅ field name must match multer
-  formData.append('proof_of_payment', proof);      // ✅ field name must match multer
+  formData.append('id_document', idDoc);
+  formData.append('proof_of_payment', proof);
 
   // Prepare documents array
   const rows = document.querySelectorAll("#documentTableBody tr");
@@ -285,9 +283,8 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
 
   formData.append('documents', JSON.stringify(documents));
 
-  // 🔍 Optional: log for debugging
   for (const [key, value] of formData.entries()) {
-    console.log('🧾 Submitting field:', key, value);
+    console.log('Submitting field:', key, value);
   }
 
   try {
@@ -350,7 +347,7 @@ async function loadDocumentTypes() {
 
     updateSummary();
   } catch (err) {
-    console.error("⚠️ Failed to load document types:", err);
+    console.error("Failed to load document types:", err);
     alert("Failed to load available document types.");
   }
 }
@@ -396,10 +393,8 @@ async function saveDraft() {
   });
 
   formData.append('documents', JSON.stringify(documents));
-
-  // ✅ Optional: Debug log FormData contents
   for (const pair of formData.entries()) {
-    console.log('🧾 FormData field:', pair[0], pair[1]);
+    console.log('FormData field:', pair[0], pair[1]);
   }
 
   try {
@@ -408,7 +403,6 @@ async function saveDraft() {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`
-        // ❗ Do NOT set 'Content-Type' when using FormData
       },
       body: formData
     });
@@ -426,7 +420,7 @@ async function saveDraft() {
     }
 
   } catch (err) {
-    console.error("❌ Error saving draft:", err);
+    console.error("Error saving draft:", err);
     responseBox.innerHTML = `<div class="alert alert-danger">❌ Error saving draft.</div>`;
   } finally {
     saveBtn.disabled = false;
@@ -444,7 +438,7 @@ async function loadDraftData(draftId) {
     if (!data.success) throw new Error('Failed to load draft');
 
     const draft = data.draft;
-    console.log("📥 Loaded draft data:", draft);
+    console.log("Loaded draft data:", draft);
 
     document.getElementById('schoolYear').value = draft.last_sy_attended || '';
     document.getElementById('mobile').value = draft.contact_number || '';
@@ -493,7 +487,7 @@ async function loadDraftData(draftId) {
       updateSummary(); // Refresh fee calculation
     }
   } catch (err) {
-    console.error('❌ Error loading draft:', err);
+    console.error('Error loading draft:', err);
     alert('An error occurred while loading your draft.');
   }
 }

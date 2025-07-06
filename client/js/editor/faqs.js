@@ -19,7 +19,7 @@ async function loadFAQs() {
     faqList.innerHTML = '';
     data.forEach(renderFaqItem);
   } catch (err) {
-    console.error('❌ Failed to load FAQs:', err);
+    console.error('Failed to load FAQs:', err);
   }
 }
 
@@ -62,7 +62,7 @@ function renderFaqItem(faq) {
 
   saveBtn.onclick = async () => {
     const updatedContent = textarea.value.trim();
-    const updatedQuestion = faq.question; // keep question same for now
+    const updatedQuestion = faq.question;
     try {
       const res = await fetch(`http://localhost:3000/faq/${faq.id}`, {
         method: 'PUT',
@@ -82,7 +82,7 @@ function renderFaqItem(faq) {
       editBtn.disabled = false;
       faq.content = updated.content;
     } catch (err) {
-      console.error('❌ Update failed:', err);
+      console.error('Update failed:', err);
       alert('Failed to update FAQ.');
     }
   };
@@ -98,7 +98,7 @@ function renderFaqItem(faq) {
       if (!res.ok) throw new Error('Delete failed');
       item.remove();
     } catch (err) {
-      console.error('❌ Delete failed:', err);
+      console.error('Delete failed:', err);
       alert('Failed to delete FAQ.');
     }
   };
@@ -130,7 +130,7 @@ addFaqForm.addEventListener('submit', async (e) => {
     renderFaqItem(newFaq);
     addFaqForm.reset();
   } catch (err) {
-    console.error('❌ Failed to create FAQ:', err);
+    console.error('Failed to create FAQ:', err);
     alert('Failed to create FAQ.');
   }
 });
@@ -138,7 +138,7 @@ addFaqForm.addEventListener('submit', async (e) => {
 async function logout() {
   const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = '/client/index.html'; // fallback
+    window.location.href = '/client/index.html';
     return;
   }
 
@@ -153,6 +153,6 @@ async function logout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('token');
-    window.location.href = '/client/index.html'; // redirect to login
+    window.location.href = '/client/index.html';
   }
 }

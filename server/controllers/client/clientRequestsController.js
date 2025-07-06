@@ -2,7 +2,6 @@ const pool = require('../../db');
 const path = require('path');
 const fs = require('fs');
 
-// Helper: Clean quotes around strings
 const clean = (val) => {
   if (typeof val === 'string' && val.startsWith('"') && val.endsWith('"')) {
     return val.slice(1, -1);
@@ -10,7 +9,6 @@ const clean = (val) => {
   return val;
 };
 
-// Shared helper
 const finalizeRequestFromData = async (client, userId, {
   idDocumentPath,
   proofOfPaymentPath,
@@ -128,7 +126,6 @@ const getDraftById = async (req, res) => {
     }
 
     const draft = result.rows[0];
-    // Clean unnecessary quotes before sending back
     draft.full_name = clean(draft.full_name);
     draft.course = clean(draft.course);
     draft.delivery_address = clean(draft.delivery_address);
@@ -185,7 +182,6 @@ const createClientRequest = async (req, res) => {
     const idDocumentPath = req.files.id_document[0].path;
     const proofOfPaymentPath = req.files.proof_of_payment[0].path;
 
-    // 🔽 Fetch full_name and birthdate from the user table
     const { rows: userRows } = await client.query(
       'SELECT full_name, birthdate FROM public.users WHERE id = $1',
       [userId]
@@ -233,10 +229,9 @@ const createClientRequest = async (req, res) => {
 
 const saveDraftRequest = async (req, res) => {
   const client = await pool.connect();
-  console.log('👀 Received files:', req.files);  // Add this line
+  console.log('👀 Received files:', req.files);
   try {
     const userId = req.user.id;
-    // 🔽 Fetch full_name from users table
     console.log('BODY:', req.body);
     console.log('FILES:', req.files);
     const { rows: userRows } = await client.query(
@@ -248,9 +243,8 @@ const saveDraftRequest = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }
 
-    const full_name = clean(userRows[0].full_name); // ✅ use this instead of req.body
+    const full_name = clean(userRows[0].full_name);
 
-    // Get other fields from request body
     let {
       delivery_address,
       last_sy_attended,
@@ -260,13 +254,11 @@ const saveDraftRequest = async (req, res) => {
       special_request
     } = req.body;
 
-    // Clean text inputs
     delivery_address = clean(delivery_address);
     course = clean(course);
     contact_number = clean(contact_number);
     special_request = special_request ? clean(special_request) : null;
 
-    // Handle file uploads
     let idDocumentPath = null;
     let proofOfPaymentPath = null;
 
@@ -277,7 +269,6 @@ const saveDraftRequest = async (req, res) => {
       proofOfPaymentPath = req.files.proof_of_payment[0].path;
     }
 
-    // Handle JSON documents
     let documentsToStore = null;
     if (documents) {
       try {
@@ -289,7 +280,6 @@ const saveDraftRequest = async (req, res) => {
       }
     }
 
-    // ✅ Insert into document_request_drafts table
     const insertDraft = await client.query(
       `INSERT INTO services.document_request_drafts (
         user_id, delivery_address, full_name,
@@ -335,7 +325,7 @@ const submitDraftRequest = async (req, res) => {
 
     await client.query('BEGIN');
 
-    // Fetch the draft
+    // Fetch draft
     const draftResult = await client.query(
       `SELECT * FROM services.document_request_drafts WHERE id = $1 AND user_id = $2`,
       [draftId, userId]
@@ -359,7 +349,6 @@ const submitDraftRequest = async (req, res) => {
       return res.status(400).json({ success: false, message: 'ID document is missing in the draft.' });
     }
 
-    // Fetch user's full_name and birthdate
     const { rows: userRows } = await client.query(
       'SELECT full_name, birthdate FROM public.users WHERE id = $1',
       [userId]
@@ -372,7 +361,6 @@ const submitDraftRequest = async (req, res) => {
 
     const user = userRows[0];
 
-    // Finalize request
     const result = await finalizeRequestFromData(client, userId, {
       idDocumentPath: draft.id_document_path,
       proofOfPaymentPath: draft.proof_of_payment,
@@ -383,10 +371,9 @@ const submitDraftRequest = async (req, res) => {
       course: draft.course,
       documentsJson: draft.documents,
       special_request: draft.special_request ?? null,
-      contact_number: draft.contact_number // ✅ add this line
+      contact_number: draft.contact_number
     });
 
-    // Delete the draft after successful submission
     await client.query(`DELETE FROM services.document_request_drafts WHERE id = $1`, [draftId]);
 
     await client.query('COMMIT');
@@ -495,7 +482,6 @@ const getMyRequests = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Step 1: Fetch document requests made by the student
     const { rows: requests } = await client.query(`
       SELECT r.id, r.status, r.full_name, r.birthdate, r.course,
              r.delivery_address, r.last_sy_attended, r.id_document_path,
@@ -506,7 +492,6 @@ const getMyRequests = async (req, res) => {
       ORDER BY r.id DESC
     `, [userId]);
 
-    // Step 2: Fetch all document items related to those requests
     const requestIds = requests.map(r => r.id);
     let itemsMap = {};
 
@@ -517,7 +502,6 @@ const getMyRequests = async (req, res) => {
         WHERE request_id = ANY($1)
       `, [requestIds]);
 
-      // Group items per request
       for (const item of items) {
         if (!itemsMap[item.request_id]) itemsMap[item.request_id] = [];
         itemsMap[item.request_id].push({
@@ -528,7 +512,6 @@ const getMyRequests = async (req, res) => {
       }
     }
 
-    // Attach items to their requests
     const enrichedRequests = requests.map(r => ({
       ...r,
       document_items: itemsMap[r.id] || [],
@@ -550,7 +533,6 @@ const deleteDraftRequestById = async (req, res) => {
     const userId = req.user.id;
     const draftId = req.params.id;
 
-    // Fetch draft first to check ownership and file paths
     const { rows } = await client.query(
       `SELECT id_document_path, proof_of_payment
        FROM services.document_request_drafts
@@ -567,7 +549,6 @@ const deleteDraftRequestById = async (req, res) => {
 
     const draft = rows[0];
 
-    // Delete files if they exist
     const deleteFileIfExists = (filePath) => {
       if (filePath && fs.existsSync(filePath)) {
         fs.unlink(filePath, (err) => {
@@ -579,7 +560,6 @@ const deleteDraftRequestById = async (req, res) => {
     deleteFileIfExists(draft.id_document_path);
     deleteFileIfExists(draft.proof_of_payment);
 
-    // Delete draft from DB
     await client.query(
       `DELETE FROM services.document_request_drafts
        WHERE id = $1 AND user_id = $2`,
@@ -606,7 +586,6 @@ const receiveRequestAndSetAlumni = async (req, res) => {
   try {
     await pool.query('BEGIN');
 
-    // Mark request as received
     const result = await pool.query(
       `UPDATE services.document_requests
       SET status = 'received',
@@ -621,7 +600,6 @@ const receiveRequestAndSetAlumni = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Request not found or not yours' });
     }
 
-    // Set user as alumni (only if not already)
     await pool.query(
       `UPDATE users
        SET is_alumni_member = true,

@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const logAction = async ({ userId, role, action, targetType, targetId, description }) => {
   try {
-    console.log('⚙️ Logging action:', { userId, role, action, targetType, targetId, description });
+    console.log('Logging action:', { userId, role, action, targetType, targetId, description });
 
     const result = await pool.query(`
       INSERT INTO public.user_action_logs 
@@ -11,9 +11,9 @@ const logAction = async ({ userId, role, action, targetType, targetId, descripti
       RETURNING id
     `, [userId, role, action, targetType, targetId, description]);
 
-    console.log('✅ Action log inserted with ID:', result.rows[0].id);
+    console.log('Action log inserted with ID:', result.rows[0].id);
   } catch (err) {
-    console.error('❌ Failed to log action:', err);
+    console.error('Failed to log action:', err);
   }
 };
 

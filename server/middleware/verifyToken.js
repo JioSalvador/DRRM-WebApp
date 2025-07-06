@@ -13,11 +13,6 @@ const verifyToken = async (req, res, next) => {
   }
 
   try {
-    // ✅ Log the raw token
-    console.log("🔐 Authorization header:", authHeader);
-    console.log("🔐 Extracted token:", tokenFromHeader);
-    console.log("🔐 Token received:", token);
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'yoursecretkey');
 
     if (!decoded?.id) {
@@ -36,7 +31,7 @@ const verifyToken = async (req, res, next) => {
     req.user = rows[0];
     next();
   } catch (err) {
-    console.error("❌ Token verification failed:", err.message);
+    console.error("Token verification failed:", err.message);
 
     if (err.name === 'TokenExpiredError') {
       return res.status(403).json({ success: false, message: "Token expired. Please log in again." });

@@ -143,7 +143,6 @@
     color: #ffffff;
   }
 
-  /* Responsive: Mobile Adjustments */
   @media (max-width: 768px) {
     .main-content {
       margin-left: 0 !important;

@@ -97,7 +97,7 @@ const login = async (req, res) => {
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000);
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
         await pool.query(
             'UPDATE users SET otp_code = $1, otp_expires_at = $2 WHERE id = $3',
@@ -159,8 +159,6 @@ const verifyLoginOtp = async (req, res) => {
             maxAge: 3600000,
         });
 
-        console.log('✅ Cookie sent with token');
-
         // Log admin/editor login
         if (user.role === 'admin' || user.role === 'editor') {
             await logAction({
@@ -175,7 +173,6 @@ const verifyLoginOtp = async (req, res) => {
 
         delete user.password;
 
-        // ✅ ✅ ✅ Send token back to frontend
         res.status(200).json({
             token,
             user: {
@@ -239,7 +236,7 @@ const checkAuth = async (req, res) => {
     }
 };
 
-// CHANGE PASSWORD
+// CHANGE PASSWORD (not implemented yet)
 const changePassword = async (req, res) => {
     const userId = req.userId;
     const { password, newPassword } = req.body;
@@ -265,7 +262,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-// CHANGE EMAIL
+// CHANGE EMAIL (not implemented for security reasons)
 const changeEmail = async (req, res) => {
     const userId = req.userId;
     const { newEmail } = req.body;
@@ -334,8 +331,6 @@ const getMe = async (req, res) => {
       WHERE id = $1
     `, [id]);
 
-    console.log("🧪 Cookie received in /me route:", req.cookies);
-
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }
@@ -352,7 +347,7 @@ const getMe = async (req, res) => {
 // DELETE ACCOUNT (unimplemented)
 const deleteAccount = async (req, res) => {
     try {
-        // Implementation placeholder
+        // Not implemented for security reasons
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

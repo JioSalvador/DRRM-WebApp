@@ -1,4 +1,4 @@
-const logs = []; // Will be filled from backend
+const logs = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchLogsFromBackend();
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const fetchLogsFromBackend = async () => {
   const token = localStorage.getItem('token');
   if (!token) {
-    console.error('❌ No token found in localStorage.');
+    console.error('No token found in localStorage.');
     return;
   }
 
@@ -25,18 +25,18 @@ const fetchLogsFromBackend = async () => {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error(`❌ Failed to fetch logs. Status ${res.status}:`, data);
+      console.error(`Failed to fetch logs. Status ${res.status}:`, data);
       return;
     }
 
-    console.log("✅ Logs fetched:", data);
+    console.log("Logs fetched:", data);
 
     logs.length = 0;
     logs.push(...data);
 
     displayLogs();
   } catch (err) {
-    console.error("❌ Network error while fetching logs:", err);
+    console.error("Network error while fetching logs:", err);
   }
 };
 
@@ -138,18 +138,18 @@ function searchLogs() {
 }
 
 function logout() {
-  const token = localStorage.getItem('token'); // 👈 get it from localStorage
+  const token = localStorage.getItem('token');
 
   fetch('http://localhost:3000/auth/logout', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${token}`, // 👈 manually add token
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   })
     .then(res => {
       if (res.ok) {
-        localStorage.removeItem('token'); // ✅ Clear token on frontend
+        localStorage.removeItem('token');
         window.location.href = '/client/index.html';
       } else {
         alert('Logout failed.');

@@ -44,7 +44,6 @@ const updateAbout = async (req, res) => {
       return res.status(404).json({ error: 'Section not found.' });
     }
 
-    // 🔍 Log the editor action
     await logAction({
       userId: req.user.id,
       role: req.user.role,

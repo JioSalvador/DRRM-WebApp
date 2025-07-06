@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     data.forEach(contact => renderContactRow(contact));
   } catch (err) {
-    console.error("❌ Failed to load contacts:", err);
+    console.error("Failed to load contacts:", err);
   }
 
   contactList.addEventListener("click", async (e) => {
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       cancelBtn.classList.add("d-none");
     }
 
-    // Save (only for existing contacts)
+    // Save
     if (e.target.classList.contains("save-btn")) {
       const contactId = row.dataset.id;
       const name = inputs[0].value.trim();
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       if (!contactId) {
-        console.warn("⚠️ Skipping update: no contact ID (likely a new row not yet saved)");
+        console.warn("Skipping update: no contact ID (likely a new row not yet saved)");
         return;
       }
 
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveBtn.classList.add("d-none");
         cancelBtn.classList.add("d-none");
       } catch (err) {
-        console.error("❌ Error saving contact:", err);
+        console.error("Error saving contact:", err);
         alert("Failed to save contact.");
       }
     }
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           await deleteContact(contactId);
           row.remove();
         } catch (err) {
-          console.error("❌ Error deleting contact:", err);
+          console.error("Error deleting contact:", err);
           alert("Failed to delete contact.");
         }
       }
@@ -126,7 +126,7 @@ async function addContact() {
       row.remove();
       renderContactRow(newContact);
     } catch (err) {
-      console.error("❌ Error saving contact:", err);
+      console.error("Error saving contact:", err);
       alert(err.message || "Failed to add contact.");
     }
   });
@@ -160,8 +160,6 @@ function renderContactRow(contact) {
 
   contactList.appendChild(row);
 }
-
-// --- API Calls ---
 
 async function postContact(name, contact) {
   const token = localStorage.getItem("token");
@@ -224,7 +222,7 @@ async function deleteContact(id) {
 async function logout() {
   const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = '/client/index.html'; // fallback
+    window.location.href = '/client/index.html';
     return;
   }
 
@@ -239,6 +237,6 @@ async function logout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('token');
-    window.location.href = '/client/index.html'; // redirect to login
+    window.location.href = '/client/index.html';
   }
 }

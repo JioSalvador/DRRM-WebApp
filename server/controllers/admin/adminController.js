@@ -5,8 +5,6 @@ const logAction = require('../../utils/logAction');
 
 const getAllRequests = async (req, res) => {
   try {
-    console.log('🧠 getAllRequests (excluding received) called');
-
     const { rows } = await pool.query(`
       SELECT 
         dr.id,
@@ -107,7 +105,7 @@ const markPaymentValidated = async (req, res) => {
        WHERE id = $1`,
       [requestId]
     );
-    console.log('markPaymentValidated: req.user =', req.user);
+
     await logAction({
       userId: req.user.id,
       role: req.user.role,

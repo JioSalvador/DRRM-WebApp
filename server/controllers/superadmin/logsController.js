@@ -1,6 +1,5 @@
 const pool = require('../../db');
 
-// GET /api/logs?role=admin&user_id=5&limit=50
 const getAllLogs = async (req, res) => {
   try {
     const { role, user_id, limit = 100 } = req.query;
@@ -34,7 +33,7 @@ const getAllLogs = async (req, res) => {
     const { rows } = await pool.query(query, values);
     res.status(200).json(rows);
   } catch (err) {
-    console.error('❌ Error fetching logs:', err);
+    console.error('Error fetching logs:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 };

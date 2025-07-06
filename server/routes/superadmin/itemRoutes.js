@@ -10,11 +10,9 @@ const verifyToken = require('../../middleware/verifyToken');
 const roleGuard = require('../../middleware/roleGuard');
 const router = express.Router();
 
-// ✅ PUBLIC route: get only active items for the frontend
-router.get('/get-all-items', getAllItems); // Make sure getAllItems filters is_active=true
+router.get('/get-all-items', getAllItems);
 
-// ✅ Protected routes for superadmins only
-router.use(verifyToken); // Sets req.user for roleGuard to work
+router.use(verifyToken);
 
 router.get('/get-item/:itemId', roleGuard('superadmin'), getItemById);
 router.post('/add-item', roleGuard('superadmin'), addItem);

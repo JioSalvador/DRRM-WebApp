@@ -1,19 +1,17 @@
 const cron = require('node-cron');
-const cleanupExpiredRequests = require('./utils/cleanupExpiredRequests.js'); // adjust if in subfolder
+const cleanupExpiredRequests = require('./utils/cleanupExpiredRequests.js');
 const express = require('express');
 const app = express();
 const pool = require('./db.js');
 const cookieParser = require('cookie-parser');
-const cors = require('cors'); // ✅ Added CORS
+const cors = require('cors');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/generated-pdfs', express.static(path.join(__dirname, 'generated-pdfs')));
 
-// ✅ Enable CORS for frontend on port 5500 (e.g., Live Server)
 app.use(cors({
   origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
   credentials: true
@@ -26,9 +24,9 @@ app.use(cookieParser());
 async function testDBConnection() {
     try {
         const result = await pool.query('SELECT NOW()');
-        console.log("✅ Database connected successfully at:", result.rows[0].now);
+        console.log("Database connected successfully at:", result.rows[0].now);
     } catch (err) {
-        console.error("❌ Database connection error:", err.message);
+        console.error("Database connection error:", err.message);
     }
 }
 testDBConnection();
@@ -78,7 +76,6 @@ cron.schedule('0 0 * * *', () => {
   cleanupExpiredRequests();
 });
 
-// Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on port: ${PORT}`);
+    console.log(`Server is running on port: ${PORT}`);
 });

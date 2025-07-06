@@ -25,9 +25,6 @@ const reasonField = document.getElementById('terminationReasonField');
 
 const requestModal = new bootstrap.Modal(document.getElementById('requestModal'));
 
-// =====================
-// REQUESTS
-// =====================
 async function loadRequests() {
   try {
     const res = await fetch('http://localhost:3000/client/my-requests', {
@@ -69,7 +66,6 @@ async function loadRequests() {
         openRequestModal(req);
       });
 
-      // If 'Receive' button is allowed
       const receiveBtn = row.querySelector('.btn-receive');
       if (req.status === 'out_for_delivery') {
         receiveBtn.addEventListener('click', async (e) => {
@@ -100,15 +96,11 @@ async function loadRequests() {
       requestsTableBody.appendChild(row);
     });
   } catch (err) {
-    console.error('❌ Error fetching requests:', err);
+    console.error('Error fetching requests:', err);
   }
 }
 
-// =====================
-// MODAL VIEW
-// =====================
 function openRequestModal(req) {
-  // Populate text fields
   modalName.textContent = req.full_name;
   modalBirthday.textContent = req.birthdate;
   modalAddress.textContent = req.address;
@@ -116,7 +108,6 @@ function openRequestModal(req) {
   modalCourse.textContent = req.course;
   modalSpecialRequest.textContent = req.special_request || 'None';
 
-  // Load images safely with fallback
   const cleanedProofPath = req.proof_of_payment?.split('\\').pop().split('/').pop();
   const cleanedIDPath = req.id_document_path?.split('\\').pop().split('/').pop();
   console.log(`[DEBUG] status: ${req.status}, reason: ${req.termination_reason}`);
@@ -161,12 +152,10 @@ function openRequestModal(req) {
   const total = docTotal + shippingFee + alumniFee;
   modalTotalAmount.textContent = `₱${total.toLocaleString()}`;
 
-  // Hide admin-only controls
   document.getElementById('togglePayment').style.display = 'none';
   document.getElementById('toggleDelivery').style.display = 'none';
   document.querySelector('.modal-footer .btn-outline-primary').style.display = 'none';
 
-  // Show termination reason if terminated
   if (req.status === 'terminated' && req.termination_reason) {
     reasonGroup.classList.remove('d-none');
     reasonField.value = req.termination_reason;
@@ -174,15 +163,9 @@ function openRequestModal(req) {
     reasonGroup.classList.add('d-none');
     reasonField.value = '';
   }
-
-  // Show the modal
-  
   requestModal.show();
 }
 
-// =====================
-// DRAFTS
-// =====================
 async function loadDrafts() {
   const tbody = document.getElementById('draftsTableBody');
   tbody.innerHTML = '';
@@ -211,7 +194,7 @@ async function loadDrafts() {
     });
 
   } catch (err) {
-    console.error('❌ Error loading drafts:', err);
+    console.error('Error loading drafts:', err);
   }
 }
 
@@ -228,13 +211,10 @@ async function deleteDraft(id) {
     if (result.success) loadDrafts();
     else alert(result.message || 'Failed to delete');
   } catch (err) {
-    console.error('❌ Error deleting draft:', err);
+    console.error('Error deleting draft:', err);
   }
 }
 
-// =====================
-// UTILS
-// =====================
 function loadThisDraft(draft) {
   localStorage.setItem('draftIdToLoad', draft.id);
   window.location.href = '../studentApplication/studentApplication.html';
@@ -287,7 +267,6 @@ async function logout() {
   }
 }
 
-// =====================
 document.addEventListener('DOMContentLoaded', () => {
   loadRequests();
   loadDrafts();

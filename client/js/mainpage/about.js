@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error("Failed to load about content:", err);
   }
 
-  // Optional: back-to-top button behavior
   const backToTop = document.querySelector('.back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', () => {

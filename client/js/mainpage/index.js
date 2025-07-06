@@ -222,11 +222,11 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
       body: JSON.stringify({ full_name, email, birthdate, password })
     });
 
-    const text = await res.text(); // 👈 Fetch plain text first
+    const text = await res.text();
     let data;
 
     try {
-      data = JSON.parse(text); // 👈 Try converting to JSON
+      data = JSON.parse(text);
     } catch {
       throw new Error('Invalid JSON response from server.');
     }
@@ -237,7 +237,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
       alert(data.error || data.message || 'Signup failed.');
     }
   } catch (err) {
-    console.error('Fetch error:', err); // 👀 See details in browser console
+    console.error('Fetch error:', err);
     alert('Network or server error.');
   }
 });

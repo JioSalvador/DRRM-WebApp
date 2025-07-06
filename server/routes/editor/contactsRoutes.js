@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getAllContacts, createContact, updateContactById, deleteContactById, getContactById } = require('../../controllers/editor/contactsController.js');
-const verifyToken = require('../../middleware/verifyToken'); // or your actual path
-const roleGuard = require('../../middleware/roleGuard');     // or your actual path
+const verifyToken = require('../../middleware/verifyToken');
+const roleGuard = require('../../middleware/roleGuard');
 
 router.get('/', getAllContacts);
 router.get('/:contactId', getContactById);

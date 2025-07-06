@@ -31,7 +31,7 @@ async function loadRegistrarContacts() {
     });
 
   } catch (err) {
-    console.error("❌ Failed to load registrar contacts:", err);
+    console.error("Failed to load registrar contacts:", err);
   }
 }
 

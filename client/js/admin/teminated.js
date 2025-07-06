@@ -50,7 +50,6 @@ function undoTermination(id) {
   const confirmed = confirm(`Are you sure you want to restore ${target.name} to Client Requests?`);
   if (!confirmed) return;
 
-  // Remove from terminated and add to client
   terminatedList = terminatedList.filter(req => req.id !== id);
   target.terminated = false;
   clientList.push(target);
